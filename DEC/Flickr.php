@@ -3,7 +3,7 @@
  * DEC_Flickr
  */
 
-require_once 'Rest.php';
+require_once 'DEC/Rest.php';
 
 class DEC_Flickr extends DEC_Rest
 {
