@@ -18,13 +18,14 @@ class DEC_Vimeo extends DEC_Rest
     protected $vimeoSecret = 'aacf71d90';
     protected $vimeoKey    = '151a1fa349ba04ea6957d2a366bb2d05';
 
-    public function __construct()
+    public function __construct($apiKey, $apiSecret, $options)
     {
         $this->setBaseUrl($this->vimeoUrl);
         $this->setApiKey($this->vimeoKey);
         $this->setApiSecret($this->vimeoSecret);
         $this->setMode('vimeo');
         //        $this->defaultOptions = array('format' => 'json');
+        parent::__construct($options);
     }
     
     public function callComplete($result) {

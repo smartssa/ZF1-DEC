@@ -13,13 +13,18 @@ abstract class DEC_Rest {
     private $restClient;
     private $method;
 
-    function __construct() {
+    private $_cache   = null;
+    private $_dbModel = null;
+    private $_logger  = null;
+
+    function __construct($options = array()) { 
+        // handle options
     }
 
     abstract function generateToken($secret, $args);
     abstract function setupApi($args);
     abstract function callComplete($result);
-    
+
     protected function call($method, $args = array())
     {
         $args = $this->setupApi($args);
@@ -47,9 +52,9 @@ abstract class DEC_Rest {
         $finalArgs['method']  = $method;
         $finalArgs['api_key'] = $this->apiKey;
         $finalArgs['rest']    = '1';
-        
+
         $client->api_sig($this->generateToken($this->apiSecret, $finalArgs));
-        
+
         $result = $this->callComplete($client->get());
         return $result;
     }
@@ -57,7 +62,7 @@ abstract class DEC_Rest {
     protected function mergeOptions($args) {
         return array_merge($this->defaultOptions, $args);
     }
-    
+
     public function setBaseUrl($url) {
         $this->baseUrl = $url;
         return $this;
@@ -82,6 +87,6 @@ abstract class DEC_Rest {
         $this->mode = $mode;
         return $this;
     }
-    
+
 
 }
