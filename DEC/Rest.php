@@ -16,10 +16,15 @@ abstract class DEC_Rest {
     function __construct() {
     }
 
-    protected function call($method, $options = array())
+    abstract function generateToken($secret, $args);
+    abstract function setupApi($args);
+    abstract function callComplete($result);
+    
+    protected function call($method, $args = array())
     {
+        $this->setupApi($args);
         $this->method = $method;
-        return $this->request($options);
+        return $this->request($args);
     }
 
     protected function request($args)
@@ -45,7 +50,9 @@ abstract class DEC_Rest {
         
         $client->api_sig($this->generateToken($this->apiSecret, $finalArgs));
 //print_r($client); exit();
-        return $client->get();
+        $result = $this->callComplete($client->get());
+        
+        return $result;
 
     }
 
@@ -78,6 +85,5 @@ abstract class DEC_Rest {
         return $this;
     }
     
-    abstract function generateToken($secret, $args);
 
 }

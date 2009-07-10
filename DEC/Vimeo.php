@@ -26,6 +26,14 @@ class DEC_Vimeo extends DEC_Rest
         $this->setMode('vimeo');
         //        $this->defaultOptions = array('format' => 'json');
     }
+    
+    public function callComplete($result) {
+        // nothing here
+    }
+    
+    public function setupApi($args) {
+        // nothing here
+    }
 
     public function generateToken($secret, $args)
     {
