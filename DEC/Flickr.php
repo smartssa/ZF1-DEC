@@ -4,10 +4,11 @@
  */
 
 require_once 'DEC/Rest.php';
+require_once 'DEC/Flickr/PhotoList.php';
 
 class DEC_Flickr extends DEC_Rest
 {
-    protected $flickrUrl = 'http://api.flickr.com/services/rest/';
+    protected $flickrUrl    = 'http://api.flickr.com/services/rest/';
     protected $flickrApiKey = '222331b8dc95c1f353ec4d482042b208';
     protected $flickrSecret = '0e98066710a2b25e';
 
@@ -22,12 +23,14 @@ class DEC_Flickr extends DEC_Rest
 
     public function callComplete($result) {
         // nothing here
+        return $result;
     }
-
+    
     public function setupApi($args) {
         // nothing here
+        return $args;
     }
-
+    
     public function testEcho($args)
     {
         return $this->call('flickr.test.echo', $args);
@@ -39,7 +42,7 @@ class DEC_Flickr extends DEC_Rest
         return '';
     }
 
-    public function searchByTags($tags, $tag_mode = 'any')
+    public function searchByTag($tags, $tag_mode = 'all')
     {
         $args['tags']     = $tags;
         $args['tag_mode'] = $tag_mode;
@@ -147,10 +150,16 @@ class DEC_Flickr extends DEC_Rest
     //    * flickr.photos.getExif
     //    * flickr.photos.getFavorites
     //    * flickr.photos.getInfo
+    public function photosGetInfo($args) {
+        return $this->call('flickr.photos.getInfo', $args);
+    }
     //    * flickr.photos.getNotInSet
     //    * flickr.photos.getPerms
     //    * flickr.photos.getRecent
     //    * flickr.photos.getSizes
+    public function photosGetSizes($args) {
+        return $this->call('flickr.photos.getSizes', $args);
+    }
     //    * flickr.photos.getUntagged
     //    * flickr.photos.getWithGeoData
     //    * flickr.photos.getWithoutGeoData
@@ -158,7 +167,8 @@ class DEC_Flickr extends DEC_Rest
     //    * flickr.photos.removeTag
     //    * flickr.photos.search
     public function photosSearch($args) {
-        return new DEC_Flickr_PhotoList($this->call('flickr.photos.search', $args));
+        $result = $this->call('flickr.photos.search', $args);
+        return new DEC_Flickr_PhotoList($result);
     }
     //    * flickr.photos.setContentType
     //    * flickr.photos.setDates

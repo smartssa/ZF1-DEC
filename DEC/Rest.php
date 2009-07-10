@@ -22,7 +22,7 @@ abstract class DEC_Rest {
     
     protected function call($method, $args = array())
     {
-        $this->setupApi($args);
+        $args = $this->setupApi($args);
         $this->method = $method;
         return $this->request($args);
     }
@@ -37,7 +37,7 @@ abstract class DEC_Rest {
         $client->method($method);
         $client->api_key($this->apiKey);
         $finalArgs = $this->mergeOptions($args);
-        
+
         foreach ($finalArgs as $key => $value) {
             $client->{$key}($value);
         }
@@ -49,11 +49,9 @@ abstract class DEC_Rest {
         $finalArgs['rest']    = '1';
         
         $client->api_sig($this->generateToken($this->apiSecret, $finalArgs));
-//print_r($client); exit();
-        $result = $this->callComplete($client->get());
         
+        $result = $this->callComplete($client->get());
         return $result;
-
     }
 
     protected function mergeOptions($args) {

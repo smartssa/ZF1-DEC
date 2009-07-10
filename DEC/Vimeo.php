@@ -29,10 +29,12 @@ class DEC_Vimeo extends DEC_Rest
     
     public function callComplete($result) {
         // nothing here
+        return $result;
     }
     
     public function setupApi($args) {
         // nothing here
+        return $args;
     }
 
     public function generateToken($secret, $args)

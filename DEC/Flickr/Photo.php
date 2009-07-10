@@ -9,7 +9,6 @@ class DEC_Flickr_Photo
     public $url;
     public $tags       = array();
     public $sizes      = array();
-    public $duration   = '';
 
     public function __construct($photo)
     {
@@ -25,7 +24,18 @@ class DEC_Flickr_Photo
         $this->tags        = (array)$info->photo->tags->tag;
         
         $sizes = $flickr->photosGetSizes(array('photo_id' => $this->id));
-        $this->sizes = (array)$sizes->size;
+        foreach ($sizes->size as $size):
+            $attributes = $size->attributes();
+            $label = (string)$attributes['label'];
+            $this->sizes[$label] = array(
+                'source' => (string)$attributes['source'],
+                'width'  => (string)$attributes['width'],
+                'height' => (string)$attributes['height'],
+                'url'    => (string)$attributes['url'],
+                'media'  => (string)$attributes['media']
+                ); 
+        endforeach;
+        
 
     }
 }
