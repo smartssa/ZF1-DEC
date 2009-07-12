@@ -1,13 +1,15 @@
 <?php
-
 /**
- * DEC_Rest
+ * @author      Darryl E. Clarke <darryl.clarke@flatlinesystems.net>
+ * @copyright   2009 Darryl E. Clarke
+ * @version     $Id$
  */
-
 
 abstract class DEC_Rest {
     protected $baseUrl;
     protected $token;
+    protected $apiKey;
+    protected $apiSecret;
     protected $defaultOptions = array();
 
     private $restClient;
@@ -19,6 +21,13 @@ abstract class DEC_Rest {
 
     function __construct($options = array()) { 
         // handle options
+        if ($options['logger'] instanceof Zend_Log) {
+            $this->_logger = $options['logger'];
+        }
+        
+        if ($options['cache'] instanceof Zend_Cache) {
+            $this->_cache = $options['cache'];
+        }
     }
 
     abstract function generateToken($secret, $args);
@@ -27,16 +36,14 @@ abstract class DEC_Rest {
 
     protected function call($method, $args = array())
     {
-        $args = $this->setupApi($args);
-        $this->method = $method;
-        return $this->request($args);
-    }
-
-    protected function request($args)
-    {
         require_once 'Zend/Rest/Client.php';
+        $args = $this->setupApi($args);
+
+        $this->method = $method;
         // method
         $client = new Zend_Rest_Client($this->baseUrl);
+        $this->log("DEC_Rest: Making request to " . $this->baseUrl);
+        
         $method = $this->method;
 
         $client->method($method);
@@ -52,11 +59,21 @@ abstract class DEC_Rest {
         $finalArgs['method']  = $method;
         $finalArgs['api_key'] = $this->apiKey;
         $finalArgs['rest']    = '1';
-
+        $this->log("DEC_Rest: Final Arguments " . print_r($finalArgs, true));
+        
         $client->api_sig($this->generateToken($this->apiSecret, $finalArgs));
 
         $result = $this->callComplete($client->get());
+        $this->log("DEC_Rest: Got results: " . print_r($result, true));
+
         return $result;
+    }
+
+    protected function log($message, $level = Zend_Log::INFO)
+    {
+        if ($this->_logger) {
+            $this->_logger->log($message, $level);
+        }
     }
 
     protected function mergeOptions($args) {

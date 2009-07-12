@@ -5,11 +5,7 @@
  * @version     $Id: IndexController.php 59 2009-03-04 07:16:20Z dclarke $
  */
 
-class DEC_Vimeo_User {
-    
-    public function __construct($user, $apiKey, $apiSecret) 
-    {
-        
-    }
-    
+class DEC_Rest_Exception extends Zend_Exception
+{
+    // nothing here, just a trapable name.
 }

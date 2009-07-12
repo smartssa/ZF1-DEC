@@ -1,6 +1,8 @@
 <?php
 /**
- * DEC_Vimeo
+ * @author      Darryl E. Clarke <darryl.clarke@flatlinesystems.net>
+ * @copyright   2009 Darryl E. Clarke
+ * @version     $Id$
  */
 
 require_once 'DEC/Rest.php';
@@ -15,14 +17,12 @@ require_once 'Zend/Loader.php';
 class DEC_Vimeo extends DEC_Rest
 {
     protected $vimeoUrl    = 'http://www.vimeo.com/api/rest/';
-    protected $vimeoSecret = 'aacf71d90';
-    protected $vimeoKey    = '151a1fa349ba04ea6957d2a366bb2d05';
 
-    public function __construct($apiKey, $apiSecret, $options)
+    public function __construct($apiKey, $apiSecret, $options = array())
     {
         $this->setBaseUrl($this->vimeoUrl);
-        $this->setApiKey($this->vimeoKey);
-        $this->setApiSecret($this->vimeoSecret);
+        $this->setApiKey($apiKey);
+        $this->setApiSecret($apiSecret);
         $this->setMode('vimeo');
         //        $this->defaultOptions = array('format' => 'json');
         parent::__construct($options);
@@ -153,7 +153,9 @@ class DEC_Vimeo extends DEC_Rest
     //vimeo.channels.getList
     public function channelsGetVideos($args)
     {
-        return new DEC_Vimeo_Channel($this->call('vimeo.channels.getVideos', $args));
+        return new DEC_Vimeo_Channel(
+            $this->call('vimeo.channels.getVideos', $args),
+            $this->apiKey, $this->apiSecret);
     }
     //vimeo.channels.getSubscribers
     //vimeo.channels.getModerators

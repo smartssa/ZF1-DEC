@@ -1,4 +1,9 @@
 <?php
+/**
+ * @author      Darryl E. Clarke <darryl.clarke@flatlinesystems.net>
+ * @copyright   2009 Darryl E. Clarke
+ * @version     $Id$
+ */
 
 class DEC_Flickr_Photo
 {
@@ -10,13 +15,14 @@ class DEC_Flickr_Photo
     public $tags       = array();
     public $sizes      = array();
 
-    public function __construct($photo)
+    public function __construct($photo, $apiKey, $apiSecret)
     {
         $attributes = $photo->attributes();
         $this->id = (string)$attributes['id'];
         
-        $flickr = new DEC_Flickr();
+        $flickr = new DEC_Flickr($apiKey, $apiSecret);
         $info = $flickr->photosGetInfo(array('photo_id' => $this->id));
+
         // populate other data, eh?
         $this->title       = (string)$info->photo->title;
         $this->description = (string)$info->photo->description;

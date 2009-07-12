@@ -1,4 +1,9 @@
 <?php
+/**
+ * @author      Darryl E. Clarke <darryl.clarke@flatlinesystems.net>
+ * @copyright   2009 Darryl E. Clarke
+ * @version     $Id: IndexController.php 59 2009-03-04 07:16:20Z dclarke $
+ */
 
 class DEC_Vimeo_Video
 {
@@ -13,12 +18,15 @@ class DEC_Vimeo_Video
     public $dimensions = array();
     public $duration   = '';
 
-    public function __construct($video)
+    public function __construct($video, $apiKey, $apiSecret)
     {
         $attributes = $video->attributes();
         $this->id = (string)$attributes['id'];
-        $vimeo = new DEC_Vimeo();
+        $config = Zend_Registry::get('config');
+
+        $vimeo = new DEC_Vimeo($apiKey, $apiSecret);
         $info = $vimeo->videosGetInfo(array('video_id' => $this->id));
+
         // populate other data, eh?
         $this->title      = (string)$info->video->title;
         $this->caption    = (string)$info->video->caption;

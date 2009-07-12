@@ -1,6 +1,8 @@
 <?php
 /**
- * DEC_Flickr
+ * @author      Darryl E. Clarke <darryl.clarke@flatlinesystems.net>
+ * @copyright   2009 Darryl E. Clarke
+ * @version     $Id$
  */
 
 require_once 'DEC/Rest.php';
@@ -9,14 +11,12 @@ require_once 'DEC/Flickr/PhotoList.php';
 class DEC_Flickr extends DEC_Rest
 {
     protected $flickrUrl    = 'http://api.flickr.com/services/rest/';
-    protected $flickrApiKey = '222331b8dc95c1f353ec4d482042b208';
-    protected $flickrSecret = '0e98066710a2b25e';
 
-    public function __construct($apiKey, $apiSecret, $options)
+    public function __construct($apiKey, $apiSecret, $options = array())
     {
         $this->setBaseUrl($this->flickrUrl);
-        $this->setApiKey($this->flickrApiKey);
-        $this->setApiSecret($this->flickrSecret);
+        $this->setApiKey($apiKey);
+        $this->setApiSecret($apiSecret);
         $this->setMode('flickr');
         //        $this->defaultOptions = array('format' => 'json');
         parent::__construct($options);
@@ -24,6 +24,10 @@ class DEC_Flickr extends DEC_Rest
 
     public function callComplete($result) {
         // nothing here
+        if ((string)$result->stat == 'fail') {
+            $result = null;
+            $this->log('DEC_Flickr: failure', Zend_Log::WARN);
+        }
         return $result;
     }
     
@@ -31,7 +35,7 @@ class DEC_Flickr extends DEC_Rest
         // nothing here
         return $args;
     }
-    
+
     public function testEcho($args)
     {
         return $this->call('flickr.test.echo', $args);
@@ -108,7 +112,9 @@ class DEC_Flickr extends DEC_Rest
     //    * flickr.groups.pools.getGroups
 
     public function groupsPoolsGetPhotos($args) {
-        return new DEC_Flickr_PhotoList($this->call('flickr.groups.pools.getPhotos', $args));
+        return new DEC_Flickr_PhotoList(
+            $this->call('flickr.groups.pools.getPhotos', $args),
+            $this->apiKey, $this->apiSecret);
     }
 
     //    * flickr.groups.pools.remove
@@ -169,7 +175,8 @@ class DEC_Flickr extends DEC_Rest
     //    * flickr.photos.search
     public function photosSearch($args) {
         $result = $this->call('flickr.photos.search', $args);
-        return new DEC_Flickr_PhotoList($result);
+        return new DEC_Flickr_PhotoList($result,
+            $this->apiKey, $this->apiSecret);
     }
     //    * flickr.photos.setContentType
     //    * flickr.photos.setDates
