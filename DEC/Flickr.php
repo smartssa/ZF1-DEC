@@ -175,7 +175,7 @@ class DEC_Flickr extends DEC_Rest
     //    * flickr.photos.search
     public function photosSearch($args) {
         
-        $this->setCacheTag($args);
+        $this->setCacheTag($args, 'flickr.photos.search');
         
         if ($result = $this->getCache()) {
             // got cache

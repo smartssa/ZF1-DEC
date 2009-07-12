@@ -123,10 +123,11 @@ abstract class DEC_Rest {
         return $this;
     }
 
-    public function setCacheTag($args) {
+    public function setCacheTag($args, $method) {
         ksort($args);
         $string = $this->apiSecret;
         $string .= $this->mode;
+        $string .= $method;
         foreach ($args as $key=>$value):
             $string .= $key . $value;
         endforeach;

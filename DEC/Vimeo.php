@@ -153,7 +153,7 @@ class DEC_Vimeo extends DEC_Rest
     //vimeo.channels.getList
     public function channelsGetVideos($args)
     {
-        $this->setCacheTag($args);
+        $this->setCacheTag($args, 'vimeo.channels.getVideos');
         if ($result = $this->getCache()) {
             // got cache
         } else {
