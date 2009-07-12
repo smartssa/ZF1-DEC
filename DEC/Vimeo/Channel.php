@@ -12,10 +12,10 @@ class DEC_Vimeo_Channel
     private $userList;
     private $moderaterList;
 
-    function __construct(Zend_Rest_Client_Result $rsp, $apiKey, $apiSecret)
+    function __construct(Zend_Rest_Client_Result $rsp, $requestObject)
     {
         $videos = $rsp->videos;
-        $this->videoList = new DEC_Vimeo_VideoList($videos, $apiKey, $apiSecret);
+        $this->videoList = new DEC_Vimeo_VideoList($videos, $requestObject);
         // TODO: build moderator list
         // TODO: build user (subscriber) list
     }

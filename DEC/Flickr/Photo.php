@@ -15,12 +15,12 @@ class DEC_Flickr_Photo
     public $tags       = array();
     public $sizes      = array();
 
-    public function __construct($photo, $apiKey, $apiSecret)
+    public function __construct($photo, $requestObject)
     {
         $attributes = $photo->attributes();
         $this->id = (string)$attributes['id'];
         
-        $flickr = new DEC_Flickr($apiKey, $apiSecret);
+        $flickr = $requestObject;
         $info = $flickr->photosGetInfo(array('photo_id' => $this->id));
 
         // populate other data, eh?

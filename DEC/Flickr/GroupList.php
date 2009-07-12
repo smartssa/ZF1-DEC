@@ -8,4 +8,8 @@
 class DEC_Flickr_GroupList
 {
     
+    public function __construct($groups, $requestObject)
+    {
+        
+    }
 }

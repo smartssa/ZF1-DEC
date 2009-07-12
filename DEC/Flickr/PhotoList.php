@@ -11,10 +11,10 @@ class DEC_Flickr_PhotoList
 {
     private $photos = array();
 
-    public function __construct($photos = array(), $apiKey, $apiSecret)
+    public function __construct($photos = array(), $requestObject)
     {
         foreach ($photos->photo as $photo) {
-            $this->photos[] = new DEC_Flickr_Photo($photo, $apiKey, $apiSecret);
+            $this->photos[] = new DEC_Flickr_Photo($photo, $requestObject);
         }
     }
 

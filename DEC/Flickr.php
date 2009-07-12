@@ -114,7 +114,7 @@ class DEC_Flickr extends DEC_Rest
     public function groupsPoolsGetPhotos($args) {
         return new DEC_Flickr_PhotoList(
             $this->call('flickr.groups.pools.getPhotos', $args),
-            $this->apiKey, $this->apiSecret);
+            $this);
     }
 
     //    * flickr.groups.pools.remove
@@ -174,9 +174,17 @@ class DEC_Flickr extends DEC_Rest
     //    * flickr.photos.removeTag
     //    * flickr.photos.search
     public function photosSearch($args) {
-        $result = $this->call('flickr.photos.search', $args);
-        return new DEC_Flickr_PhotoList($result,
-            $this->apiKey, $this->apiSecret);
+        
+        $this->setCacheTag($args);
+        
+        if ($result = $this->getCache()) {
+            // got cache
+        } else {
+            $result = $this->call('flickr.photos.search', $args);
+            $result = new DEC_Flickr_PhotoList($result, $this);
+            $this->saveCache($result);
+        }
+        return $result;
     }
     //    * flickr.photos.setContentType
     //    * flickr.photos.setDates

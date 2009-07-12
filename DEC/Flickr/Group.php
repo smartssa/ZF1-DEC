@@ -7,5 +7,9 @@
 
 class DEC_Flickr_Group
 {
+    public function __construct($group, $requestObject)
+    {
+        
+    }
     
 }

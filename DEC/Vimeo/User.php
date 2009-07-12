@@ -7,7 +7,7 @@
 
 class DEC_Vimeo_User {
     
-    public function __construct($user, $apiKey, $apiSecret) 
+    public function __construct($user, $requestObject) 
     {
         
     }

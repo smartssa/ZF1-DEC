@@ -9,7 +9,7 @@ class DEC_Vimeo_ChannelList {
     
     private $channels = array();
     
-    public function __construct($channels, $apiKey, $apiSecret) 
+    public function __construct($channels, $requestObject) 
     {
         
     }

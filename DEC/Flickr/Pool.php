@@ -7,5 +7,9 @@
 
 class DEC_Flickr_Pool
 {
+    public function __construct($pool, $requestObject)
+    {
+        
+    }
     
 }

@@ -9,10 +9,10 @@ class DEC_Vimeo_VideoList
 {
     private $videos = array();
     
-    public function __construct($videos, $apiKey, $apiSecret)
+    public function __construct($videos, $requestObject)
     {
         foreach ($videos->video as $video) {
-            $this->videos[] = new DEC_Vimeo_Video($video, $apiKey, $apiSecret);
+            $this->videos[] = new DEC_Vimeo_Video($video, $requestObject);
         }
     }
     

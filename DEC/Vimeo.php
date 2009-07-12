@@ -153,9 +153,15 @@ class DEC_Vimeo extends DEC_Rest
     //vimeo.channels.getList
     public function channelsGetVideos($args)
     {
-        return new DEC_Vimeo_Channel(
-            $this->call('vimeo.channels.getVideos', $args),
-            $this->apiKey, $this->apiSecret);
+        $this->setCacheTag($args);
+        if ($result = $this->getCache()) {
+            // got cache
+        } else {
+            $result = $this->call('vimeo.channels.getVideos', $args);
+            $result = new DEC_Vimeo_Channel($result, $this);
+            $this->saveCache($result);
+        }
+        return $result;
     }
     //vimeo.channels.getSubscribers
     //vimeo.channels.getModerators

@@ -9,7 +9,7 @@ class DEC_Vimeo_UserList
 {
     private $users = array();
     
-    public function __construct($users, $apiKey, $apiSecret)
+    public function __construct($users, $requestObject)
     {
         // TODO: add users
     }

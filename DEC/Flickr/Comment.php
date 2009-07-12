@@ -7,5 +7,9 @@
 
 class DEC_Flickr_Comment
 {
-    
+    public function __construct($comment, $requestObject)
+    {
+
+    }
+
 }

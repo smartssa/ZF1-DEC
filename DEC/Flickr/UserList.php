@@ -7,5 +7,9 @@
 
 class DEC_Flickr_UserList
 {
+    public function __construct($users, $requestObject)
+    {
+        
+    }
     
 }
