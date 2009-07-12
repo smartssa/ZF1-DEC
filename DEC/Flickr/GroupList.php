@@ -5,11 +5,15 @@
  * @version     $Id$
  */
 
-class DEC_Flickr_GroupList
+require_once 'DEC/List.php';
+
+class DEC_Flickr_GroupList extends DEC_List
 {
+
+    private $groups = array();
     
     public function __construct($groups, $requestObject)
     {
-        
+        $this->list = &$this->groups;
     }
 }

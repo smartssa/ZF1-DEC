@@ -5,12 +5,15 @@
  * @version     $Id$
  */
 
+require_once 'DEC/List.php';
 
-class DEC_Flickr_CommentList
+class DEC_Flickr_CommentList extends DEC_List
 {
+    private $comments = array();
+    
     public function __construct($comments, $requestObject)
     {
-        
+        $this->list = &$this->comments;
     }
     
 }

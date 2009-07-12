@@ -6,7 +6,10 @@
  */
 
 require_once 'DEC/Rest.php';
+require_once 'DEC/Flickr/Photo.php';
 require_once 'DEC/Flickr/PhotoList.php';
+require_once 'DEC/Flickr/Group.php';
+require_once 'DEC/Flickr/GroupList.php';
 
 class DEC_Flickr extends DEC_Rest
 {
@@ -43,8 +46,13 @@ class DEC_Flickr extends DEC_Rest
 
     public function generateToken($secret, $args)
     {
-        // no signature for flickr
-        return '';
+        ksort($args);
+        $string = $secret;
+        foreach ($args as $key=>$value):
+            $string .= $key . $value;
+        endforeach;
+
+        return md5($string);
     }
 
     public function searchByTag($tags, $tag_mode = 'all')
@@ -112,9 +120,16 @@ class DEC_Flickr extends DEC_Rest
     //    * flickr.groups.pools.getGroups
 
     public function groupsPoolsGetPhotos($args) {
-        return new DEC_Flickr_PhotoList(
-            $this->call('flickr.groups.pools.getPhotos', $args),
-            $this);
+        $this->setCacheTag($args, 'flickr.groups.pools.getPhotos');
+        
+        if ($result = $this->getCache()) {
+            // got cache
+        } else {
+            $result = $this->call('flickr.groups.pools.getPhotos', $args);
+            $result = new DEC_Flickr_PhotoList($result, $this);
+            $this->saveCache($result);
+        }
+        return $result;
     }
 
     //    * flickr.groups.pools.remove

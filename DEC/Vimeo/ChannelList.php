@@ -5,12 +5,16 @@
  * @version     $Id: IndexController.php 59 2009-03-04 07:16:20Z dclarke $
  */
 
-class DEC_Vimeo_ChannelList {
+require_once 'DEC/List.php';
+
+class DEC_Vimeo_ChannelList extends DEC_List 
+{
     
     private $channels = array();
     
     public function __construct($channels, $requestObject) 
     {
+        $this->list = &$this->channels;
         
     }
     

@@ -20,24 +20,39 @@ class DEC_Vimeo_Video
 
     public function __construct($video, $requestObject)
     {
+        // TODO: verify video is actually a video element.
         $attributes = $video->attributes();
         $this->id = (string)$attributes['id'];
         $config = Zend_Registry::get('config');
 
         $vimeo = $requestObject;
-        $info = $vimeo->videosGetInfo(array('video_id' => $this->id));
+        /*
+         * There's a chance we didn't get a full response from some API calls
+         * if that's the case, we'll need to do a separate query to get full
+         * details.
+         */
+        if ($info->title) {
+            $info = $video;
+        } else {
+            // title is not included in the short response.
+            $info = $vimeo->videosGetInfo(array('video_id' => $this->id));
+        }
 
         // populate other data, eh?
-        $this->title      = (string)$info->video->title;
-        $this->caption    = (string)$info->video->caption;
-        $this->uploadDate = (string)$info->video->upload_date;
-        $this->url        = (string)$info->video->urls->url;
-        $this->thumbnails = (array)$info->video->thumbnails->thumbnail;
-        $this->tags       = (array)$info->video->tags->tag;
-        $this->duration   = (string)$info->video->duration;
+        $this->title      = (string)$info->title;
+        $this->caption    = (string)$info->caption;
+        $this->uploadDate = (string)$info->upload_date;
+        $this->url        = (string)$info->urls->url;
+        $this->thumbnails = (array)$info->thumbnails->thumbnail;
+        $this->tags       = (array)$info->tags->tag;
+        $this->duration   = (string)$info->duration;
         
         
-        $this->dimensions['height'] = (string)$info->video->height;
-        $this->dimensions['width']  = (string)$info->video->width; 
+        $this->dimensions['height'] = (string)$info->height;
+        $this->dimensions['width']  = (string)$info->width; 
+    }
+    
+    public function getId() {
+        return $this->id;
     }
 }
