@@ -22,6 +22,9 @@ class DEC_Acl extends Zend_Acl {
         foreach ($roles as $role) {
             $this->addRole(new DEC_Acl_Role($role->role));
         }
+        $where = $this->dbUserRoles->getAdapter()->quoteInto('users_id = ?', $this->user->id);
+        $userRoles = $this->dbUserRoles->fetchAll($where);
+//        foreach ()
         // add the user role
         $acl->addRole(new DEC_Acl_Role($this->user->username));
 
@@ -31,7 +34,7 @@ class DEC_Acl extends Zend_Acl {
     function checkPermission($resource, $action, $redirect = false)
     {
         // if we're not logged in redirect to the login page
-        if ($this->user->username == '') {
+        if ($this->user->id == 0) {
             // bugger off - login required
             if ($redirect) {
                 $this->_redirect($redirect);
