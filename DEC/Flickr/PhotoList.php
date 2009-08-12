@@ -24,6 +24,4 @@ class DEC_Flickr_PhotoList extends DEC_List
     {
         return $this->photos;
     }
-
-
 }

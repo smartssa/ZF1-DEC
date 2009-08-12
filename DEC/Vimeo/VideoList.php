@@ -25,5 +25,4 @@ class DEC_Vimeo_VideoList extends DEC_List
     {
         return $this->videos;
     }
-
 }
