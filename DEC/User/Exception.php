@@ -5,7 +5,7 @@
  * @version     $Id$
  */
 
-class DEC_Rest_Exception extends Zend_Exception
+class DEC_User_Exception extends Zend_Exception
 {
     // nothing here, just a trapable name.
 }
