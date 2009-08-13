@@ -7,6 +7,7 @@ require_once 'DEC/Acl/Resource.php';
 class DEC_Acl extends Zend_Acl {
 
     protected $user;
+    protected $roles;
     protected $dbRoles;
     protected $dbUserRoles;
     protected $cache;
@@ -14,21 +15,34 @@ class DEC_Acl extends Zend_Acl {
     function __construct($user)
     {
         $this->user = $user;
-        //
-        $this->dbRoles     = new Roles();
-        $this->dbUserRoles = new UserHasRoles();
-        // build the role list
-        $roles = $this->dbRoles->fetchAll();
-        foreach ($roles as $role) {
-            $this->addRole(new DEC_Acl_Role($role->role));
+        if ($user->id > 0) {
+            //
+            Zend_Loader::loadClass('Roles');
+            Zend_Loader::loadClass('UsersHasRoles');
+            $this->dbRoles     = new Roles();
+            $this->dbUserRoles = new UsersHasRoles();
+            // build the role list
+            $rolesRs = $this->dbRoles->fetchAll();
+            foreach ($rolesRs as $role) {
+                $this->addRole(new DEC_Acl_Role($role->role));
+                $roles[$role->id] = $role->role;
+            }
+            $where = $this->dbUserRoles->getAdapter()->quoteInto('users_id = ?', $this->user->id);
+            $userRoles = $this->dbUserRoles->fetchAll($where);
+            $this->user->roles = array();
+            
+            foreach ($userRoles as $userRole) {
+                $this->user->roles[] = $roles[$userRole->roles_id];
+            } 
+            // add the special user role
+            $this->addRole(new DEC_Acl_Role($this->user->username), $this->user->roles);
         }
-        $where = $this->dbUserRoles->getAdapter()->quoteInto('users_id = ?', $this->user->id);
-        $userRoles = $this->dbUserRoles->fetchAll($where);
-//        foreach ()
-        // add the user role
-        $acl->addRole(new DEC_Acl_Role($this->user->username));
-
         // resources and actions are to be added by the controllers
+    }
+
+    function addResource($resource)
+    {
+        $this->add(new DEC_Acl_Resource($resource));
     }
 
     function checkPermission($resource, $action, $redirect = false)
@@ -40,8 +54,8 @@ class DEC_Acl extends Zend_Acl {
                 $this->_redirect($redirect);
             }
         } else {
-            if ($this->acl->isAllowed($this->user->username, $resource, $action) 
-                || in_array('superuser', $this->user->userRoles))
+            if ($this->isAllowed($this->user->username, $resource, $action)
+            || in_array('superuser', $this->user->roles))
             {
                 // then let 'em in
                 return true;
