@@ -25,6 +25,7 @@ class DEC_Vimeo_Video
         
         // TODO: verify video is actually a video element.
         $attributes        = $video->attributes();
+        print_r($attributes);
         $this->id          = (string)$attributes['id'];
         $this->vimeoUserId = (string)$attributes['owner'];
 
