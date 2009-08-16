@@ -11,6 +11,7 @@ class DEC_Vimeo_Video
 
     public $title;
     public $caption;
+    public $vimeoUserId;
     public $uploadDate;
     public $url;
     public $thumbnails = array();
@@ -20,10 +21,12 @@ class DEC_Vimeo_Video
 
     public function __construct($video, $requestObject)
     {
-        // TODO: verify video is actually a video element.
-        $attributes = $video->attributes();
-        $this->id = (string)$attributes['id'];
         $config = Zend_Registry::get('config');
+        
+        // TODO: verify video is actually a video element.
+        $attributes        = $video->attributes();
+        $this->id          = (string)$attributes['id'];
+        $this->vimeoUserId = (string)$attributes['owner'];
 
         $vimeo = $requestObject;
         /*
