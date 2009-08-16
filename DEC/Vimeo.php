@@ -16,7 +16,7 @@ require_once 'Zend/Loader.php';
 
 class DEC_Vimeo extends DEC_Rest
 {
-    protected $vimeoUrl    = 'http://www.vimeo.com/api/rest/';
+    protected $vimeoUrl    = 'http://www.vimeo.com/api/rest/v2/';
 
     public function __construct($apiKey, $apiSecret, $options = array())
     {
