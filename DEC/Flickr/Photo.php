@@ -46,4 +46,9 @@ class DEC_Flickr_Photo
         
 
     }
+    
+    public function getId()
+    {
+        return $this->id;
+    }
 }
