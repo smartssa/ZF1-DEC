@@ -11,14 +11,16 @@ class DEC_Flickr_Photo
 
     public $title;
     public $description;
+    public $flickrUser;
     public $url;
     public $tags       = array();
     public $sizes      = array();
 
     public function __construct($photo, $requestObject)
     {
-        $attributes = $photo->attributes();
-        $this->id = (string)$attributes['id'];
+        $attributes       = $photo->attributes();
+        $this->id         = (string)$attributes['id'];
+        $this->flickrUser = (string)$attributes['owner'];
         
         $flickr = $requestObject;
         $info = $flickr->photosGetInfo(array('photo_id' => $this->id));
