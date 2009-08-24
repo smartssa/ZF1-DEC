@@ -15,25 +15,26 @@ class DEC_Acl extends Zend_Acl {
     function __construct($user)
     {
         $this->user = $user;
+        Zend_Loader::loadClass('Roles');
+        Zend_Loader::loadClass('UsersHasRoles');
+        $this->dbRoles     = new Roles();
+        $this->dbUserRoles = new UsersHasRoles();
+        // build the role list
+        $rolesRs = $this->dbRoles->fetchAll();
+        foreach ($rolesRs as $role) {
+            $this->addRole(new DEC_Acl_Role($role->role));
+            $roles[$role->id] = $role->role;
+        }
+
         if ($user->id > 0) {
             //
-            Zend_Loader::loadClass('Roles');
-            Zend_Loader::loadClass('UsersHasRoles');
-            $this->dbRoles     = new Roles();
-            $this->dbUserRoles = new UsersHasRoles();
-            // build the role list
-            $rolesRs = $this->dbRoles->fetchAll();
-            foreach ($rolesRs as $role) {
-                $this->addRole(new DEC_Acl_Role($role->role));
-                $roles[$role->id] = $role->role;
-            }
             $where = $this->dbUserRoles->getAdapter()->quoteInto('users_id = ?', $this->user->id);
             $userRoles = $this->dbUserRoles->fetchAll($where);
             $this->user->roles = array();
-            
+
             foreach ($userRoles as $userRole) {
                 $this->user->roles[] = $roles[$userRole->roles_id];
-            } 
+            }
             // add the special user role
             $this->addRole(new DEC_Acl_Role($this->user->username), $this->user->roles);
         }
