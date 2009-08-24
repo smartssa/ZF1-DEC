@@ -24,7 +24,7 @@ class DEC_User
         
         self::$infoKeys = self::$_dbInfoKeys->getKeys();
         self::$infoIds  = array_keys(self::$infoKeys);
-        self::$info     = new stdObject();
+        self::$info     = new stdObject;
 
         print_r(self::$infoKeys);
         print_r(self::$infoIds);
