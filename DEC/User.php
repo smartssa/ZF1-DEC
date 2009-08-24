@@ -26,9 +26,6 @@ class DEC_User
         self::$infoIds  = array_keys(self::$infoKeys);
         self::$info     = new stdClass;
 
-        print_r(self::$infoKeys);
-        print_r(self::$infoIds);
-        
         if ($userId)  {
             // populate since we got a user
             $where = self::$_dbUsersInfo->getAdapter()->quoteInto('users_id = ?', $userId);
@@ -43,6 +40,7 @@ class DEC_User
     function getInstance($userId = null)
     {
         if (self::$_instance === null) {
+            print_r($userId);
             self::$_instance = new self($userId);
         } 
         return self::$_instance;
