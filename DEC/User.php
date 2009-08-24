@@ -35,7 +35,7 @@ class DEC_User
         if ($userId > 0)  {
             // populate since we got a user
             $where  = $this->_dbUsersInfo->getAdapter()->quoteInto('users_id = ?', $userId);
-            $infoRS = $this->_dbUsersInfo->fetchAll();
+            $infoRS = $this->_dbUsersInfo->fetchAll($where);
             foreach ($infoRS as $row) {
                 $key = $this->infoKeys[$row->id];
                 $this->info->$key = $row->value;
