@@ -24,12 +24,19 @@ class DEC_User
         
         self::$infoKeys = self::$_dbInfoKeys->getKeys();
         self::$infoIds  = array_keys(self::$infoKeys);
-        
+        self::$info     = new stdObject();
+
         print_r(self::$infoKeys);
         print_r(self::$infoIds);
         
         if ($userId)  {
             // populate since we got a user
+            $where = self::$_dbUsersInfo->getAdapter()->quoteInto('users_id = ?', $userId);
+            $infoRS = self::$_dbUsersInfo->fetchAll();
+            foreach ($infoRS as $row) {
+                $key = self::$_infoKeys[$row->id];
+                self::$info->$key = $row->value;
+            }
         }
     }
 
