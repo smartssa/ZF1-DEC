@@ -50,8 +50,9 @@ class DEC_User
         
     }
     
-    function getInfo()
+    static function getInfo($userId)
     {
+        self::getInstance($userId);
         return self::$info;
     }
 }
