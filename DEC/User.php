@@ -9,6 +9,7 @@ class DEC_User
     static $_dbInfoKeys;
     
     static $infoKeys;
+    static $infoIds;
     static $info;
     
     function __construct($userId = null, $cache = null)
