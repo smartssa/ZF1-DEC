@@ -31,7 +31,7 @@ var_dump($userId);
             $where = self::$_dbUsersInfo->getAdapter()->quoteInto('users_id = ?', $userId);
             $infoRS = self::$_dbUsersInfo->fetchAll();
             foreach ($infoRS as $row) {
-                $key = self::$_infoKeys[$row->id];
+                $key = self::$infoKeys[$row->id];
                 self::$info->$key = $row->value;
             }
         }
