@@ -37,7 +37,7 @@ class DEC_User
             $where  = $this->_dbUsersInfo->getAdapter()->quoteInto('users_id = ?', $userId);
             $infoRS = $this->_dbUsersInfo->fetchAll($where);
             foreach ($infoRS as $row) {
-                $key = $this->infoKeys[$row->id];
+                $key = $this->infoKeys[$row->info_keys_id];
                 $this->info->$key = $row->value;
             }
         }
