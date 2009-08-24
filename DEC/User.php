@@ -54,6 +54,10 @@ class DEC_User
     function updateUserInfo($infoArray = array()) {
         //
         foreach ($infoArray as $key => $value) {
+            $insert = array();
+            $where  = array();
+            $data   = array();
+            
             // go for it
             if (! $this->infoIds[$key]) {
                 // this key doesn't exist
