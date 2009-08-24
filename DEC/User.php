@@ -4,13 +4,15 @@ class DEC_User
 {
 
     static $_instance = null;
-    static $_dbUsers;
-    static $_dbUsersInfo;
-    static $_dbInfoKeys;
     
-    static $infoKeys;
-    static $infoIds;
-    static $info;
+    private $_dbUsers;
+    private $_dbUsersInfo;
+    private $_dbInfoKeys;
+    
+    private $infoKeys;
+    private $infoIds;
+
+    public  $info;
     
     function __construct($userId = null, $cache = null)
     {
@@ -18,20 +20,20 @@ class DEC_User
         Zend_Loader::loadClass('UsersInfo');
         Zend_Loader::loadClass('InfoKeys');
 
-        self::$_dbUsers     = new Users();
-        self::$_dbUsersInfo = new UsersInfo();
-        self::$_dbInfoKeys  = new InfoKeys();
+        $this->_dbUsers     = new Users();
+        $this->_dbUsersInfo = new UsersInfo();
+        $this->_dbInfoKeys  = new InfoKeys();
         
-        self::$infoKeys = self::$_dbInfoKeys->getKeys();
-        self::$infoIds  = array_keys(self::$infoKeys);
-        self::$info     = new stdClass;
+        $this->infoKeys = $this->_dbInfoKeys->getKeys();
+        $this->infoIds  = array_keys($this->infoKeys);
+        $this->info     = new stdClass;
         if ($userId > 0)  {
             // populate since we got a user
-            $where = self::$_dbUsersInfo->getAdapter()->quoteInto('users_id = ?', $userId);
-            $infoRS = self::$_dbUsersInfo->fetchAll();
+            $where  = $this->_dbUsersInfo->getAdapter()->quoteInto('users_id = ?', $userId);
+            $infoRS = $this->_dbUsersInfo->fetchAll();
             foreach ($infoRS as $row) {
-                $key = self::$infoKeys[$row->id];
-                self::$info->$key = $row->value;
+                $key = $this->infoKeys[$row->id];
+                $this->info->$key = $row->value;
             }
         }
     }
@@ -39,20 +41,18 @@ class DEC_User
     function getInstance($userId = null)
     {
         if (self::$_instance === null) {
-            self::$_instance = new self($userId);
+            self::$_instance = new DEC_User($userId);
         } 
         return self::$_instance;
     }
     
-    static function updateUserInfo($userId, $infoArray = array()) {
+    function updateUserInfo($infoArray = array()) {
         //
-        self::getInstance($userId);
         
     }
     
-    static function getInfo($userId)
+    static function getInfo()
     {
-        self::getInstance($userId);
-        return self::$info;
+        return $this->$info;
     }
 }
