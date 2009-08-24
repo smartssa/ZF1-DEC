@@ -51,8 +51,8 @@ class DEC_User
         
     }
     
-    static function getInfo()
+    function getInfo()
     {
-        return $this->$info;
+        return $this->info;
     }
 }
