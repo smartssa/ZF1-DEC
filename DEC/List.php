@@ -2,7 +2,7 @@
 /**
  * A simple list Iterator.
  * @author  Darryl E. Clarke
- * @version $Id:$
+ * @version $Id$
  */
 class DEC_List implements Iterator
 {
