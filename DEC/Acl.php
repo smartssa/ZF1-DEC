@@ -12,15 +12,15 @@ class DEC_Acl extends Zend_Acl {
     protected $dbUserRoles;
     protected $cache;
 
-    function __construct($user)
+    function __construct($user = null)
     {
-        $this->user = $user;
         Zend_Loader::loadClass('Roles');
         Zend_Loader::loadClass('UsersHasRoles');
         $this->dbRoles     = new Roles();
         $this->dbUserRoles = new UsersHasRoles();
         // build the role list
         $rolesRs = $this->dbRoles->fetchAll();
+        $this->user = $user;
         foreach ($rolesRs as $role) {
             $this->addRole(new DEC_Acl_Role($role->role));
             $roles[$role->id] = $role->role;
@@ -36,7 +36,12 @@ class DEC_Acl extends Zend_Acl {
                 $this->user->roles[] = $roles[$userRole->roles_id];
             }
             // add the special user role
-            $this->addRole(new DEC_Acl_Role($this->user->username), $this->user->roles);
+            if (count($this->user->roles) > 0) {
+                $this->addRole(new DEC_Acl_Role($this->user->username), $this->user->roles);
+            } else {
+                $this->addRole(new DEC_Acl_Role($this->user->username));
+            }
+
         }
         // resources and actions are to be added by the controllers
     }
