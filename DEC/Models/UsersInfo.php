@@ -1,6 +1,6 @@
 <?php
 /*
- * @revision    $Id: UsersInfo.php 18 2009-08-24 07:57:48Z dclarke $
+ * @revision    $Id$
  * @author      Darryl Clarke
  * 
  */

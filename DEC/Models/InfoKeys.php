@@ -1,6 +1,6 @@
 <?php
 /*
- * @revision    $Id: InfoKeys.php 21 2009-08-24 08:04:44Z dclarke $
+ * @revision    $Id$
  * @author      Darryl Clarke
  * 
  */

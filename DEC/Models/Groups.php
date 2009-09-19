@@ -1,6 +1,6 @@
 <?php
 /*
- * @revision    $Id: Groups.php 28 2009-08-25 05:36:20Z dclarke $
+ * @revision    $Id$
  * @author      Darryl Clarke
  *
  */
