@@ -17,14 +17,14 @@ class DEC_User
 
     function __construct($userId = null, $cache = null)
     {
-        Zend_Loader::loadClass('Users');
-        Zend_Loader::loadClass('UsersInfo');
-        Zend_Loader::loadClass('InfoKeys');
+        Zend_Loader::loadClass('DEC_Models_Users');
+        Zend_Loader::loadClass('DEC_Models_UsersInfo');
+        Zend_Loader::loadClass('DEC_Models_InfoKeys');
 
         $this->_userId      = $userId;
-        $this->_dbUsers     = new Users();
-        $this->_dbUsersInfo = new UsersInfo();
-        $this->_dbInfoKeys  = new InfoKeys();
+        $this->_dbUsers     = new DEC_Models_Users();
+        $this->_dbUsersInfo = new DEC_Models_UsersInfo();
+        $this->_dbInfoKeys  = new DEC_Models_InfoKeys();
 
         $this->infoKeys = $this->_dbInfoKeys->getKeys();
         foreach ($this->infoKeys as $key => $value) {
