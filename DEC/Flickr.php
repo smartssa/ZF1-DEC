@@ -69,11 +69,22 @@ class DEC_Flickr extends DEC_Rest
     //    * flickr.activity.userPhotos
     //
     //auth
-    //
-    //    * flickr.auth.checkToken
+
+    public function authCheckToken($args)
+    {
+        return $this->call('flickr.auth.checkToken', $args);
+    }
     //    * flickr.auth.getFrob
-    //    * flickr.auth.getFullToken
-    //    * flickr.auth.getToken
+
+    public function authGetFullToken($args)
+    {
+        return $this->call('flickr.auth.getFullToken', $args);
+    }
+
+    public function authGetToken($args) 
+    {
+        return $this->call('flickr.auth.getToken', $args);
+    }
     //
     //blogs
     //

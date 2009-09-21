@@ -73,6 +73,10 @@ class DEC_Vimeo extends DEC_Rest
      */
 
     //vimeo.auth.getToken
+    
+    public function authGetToken($args) {
+        return $this->call('vimeo.auth.getToken', $args);
+    }
     //vimeo.auth.getFrob
     //vimeo.auth.checkToken
 
