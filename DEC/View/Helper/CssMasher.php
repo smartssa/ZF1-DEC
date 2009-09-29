@@ -32,12 +32,12 @@ class DEC_View_Helper_CssMasher extends DEC_View_Helper_Helper
     }
 
     private function getIncludeContents($filename) {
-        if (is_file($filename)) {
+//        if (is_file($filename)) {
             //        echo getCwd();
             file_get_contents($filename);
             return $contents;
-        }
-        return false;
+//        }
+//        return false;
     }
 
 }
