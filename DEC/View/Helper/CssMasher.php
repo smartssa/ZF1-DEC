@@ -17,10 +17,10 @@ class DEC_View_Helper_CssMasher extends DEC_View_Helper_Helper
         //@import url("/css/grid.css");
         //@import url("/css/type.css");
         //@import url("/css/widgets.css");
-        $css .= $this->getInludeContents($root . '/css/reset.css');
-        $css .= $this->getInludeContents($root . '/css/grid.css');
-        $css .= $this->getInludeContents($root . '/css/type.css');
-        $css .= $this->getInludeContents($root . '/css/widgets.css');
+        $css .= $this->getIncludeContents($root . '/css/reset.css');
+        $css .= $this->getIncludeContents($root . '/css/grid.css');
+        $css .= $this->getIncludeContents($root . '/css/type.css');
+        $css .= $this->getIncludeContents($root . '/css/widgets.css');
         // hackish for now
         // compress it into a mess
         /* remove comments */
