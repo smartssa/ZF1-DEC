@@ -2,7 +2,7 @@
 /**
  * @author      Darryl E. Clarke <darryl.clarke@flatlinesystems.net>
  * @copyright   2009 Darryl E. Clarke
- * @version     $Id: Vimeo.php 55 2009-09-21 05:12:53Z dclarke $
+ * @version     $Id$
  */
 
 class DEC_View_Helper_CssMasher extends DEC_View_Helper_Helper
@@ -17,10 +17,10 @@ class DEC_View_Helper_CssMasher extends DEC_View_Helper_Helper
         //@import url("/css/grid.css");
         //@import url("/css/type.css");
         //@import url("/css/widgets.css");
-        $css .= $this->getIncludeContents($root . '/css/reset.css');
-        $css .= $this->getIncludeContents($root . '/css/grid.css');
-        $css .= $this->getIncludeContents($root . '/css/type.css');
-        $css .= $this->getIncludeContents($root . '/css/widgets.css');
+        $css .= $this->getIncludeContents('css/reset.css');
+        $css .= $this->getIncludeContents('css/grid.css');
+        $css .= $this->getIncludeContents('css/type.css');
+        $css .= $this->getIncludeContents('css/widgets.css');
         // hackish for now
         // compress it into a mess
         /* remove comments */
@@ -32,11 +32,11 @@ class DEC_View_Helper_CssMasher extends DEC_View_Helper_Helper
     }
 
     private function getIncludeContents($filename) {
-        //        if (is_file($filename)) {
-        echo getCwd();
-        file_get_contents($filename);
-        return $contents;
-        //        }
+        if (is_file($filename)) {
+            //        echo getCwd();
+            file_get_contents($filename);
+            return $contents;
+        }
         return false;
     }
 

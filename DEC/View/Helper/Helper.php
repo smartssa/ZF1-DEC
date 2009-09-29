@@ -2,7 +2,7 @@
 /**
  * @author      Darryl E. Clarke <darryl.clarke@flatlinesystems.net>
  * @copyright   2009 Darryl E. Clarke
- * @version     $Id: Vimeo.php 55 2009-09-21 05:12:53Z dclarke $
+ * @version     $Id$
  */
 
 class DEC_View_Helper_Helper
