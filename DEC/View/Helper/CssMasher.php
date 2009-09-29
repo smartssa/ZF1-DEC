@@ -10,7 +10,7 @@ class DEC_View_Helper_CssMasher extends DEC_View_Helper_Helper
     public function cssMasher($startFile = '/css/base.css')
     {
         $css  = '';
-        $root = '../document_root';
+        $root = '.';
         // TODO: start at the startFile and recurse through all @imports
         // build a big string
         //@import url("/css/reset.css");
