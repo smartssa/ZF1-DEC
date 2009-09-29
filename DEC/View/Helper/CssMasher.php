@@ -10,18 +10,20 @@ class DEC_View_Helper_CssMasher extends DEC_View_Helper_Helper
     public function cssMasher($startFile = '/css/base.css')
     {
         $css  = '';
-        $root = '.';
+        $root = getCwd(); // should be documet_root
         // TODO: start at the startFile and recurse through all @imports
         // build a big string
         //@import url("/css/reset.css");
         //@import url("/css/grid.css");
         //@import url("/css/type.css");
         //@import url("/css/widgets.css");
-        $css .= $this->getIncludeContents('css/reset.css');
-        $css .= $this->getIncludeContents('css/grid.css');
-        $css .= $this->getIncludeContents('css/type.css');
-        $css .= $this->getIncludeContents('css/widgets.css');
+        $css .= file_get_contents($root . '/css/reset.css');
+        $css .= file_get_contents($root . '/css/grid.css');
+        $css .= file_get_contents($root . '/css/type.css');
+        $css .= file_get_contents($root . '/css/widgets.css');
         // hackish for now
+        
+        // TODO: Cache this
         // compress it into a mess
         /* remove comments */
         $css = preg_replace('!/\*[^*]*\*+([^/][^*]*\*+)*/!', '', $css);
@@ -31,13 +33,5 @@ class DEC_View_Helper_CssMasher extends DEC_View_Helper_Helper
         return $css;
     }
 
-    private function getIncludeContents($filename) {
-//        if (is_file($filename)) {
-            //        echo getCwd();
-            file_get_contents($filename);
-            return $contents;
-//        }
-//        return false;
-    }
 
 }
