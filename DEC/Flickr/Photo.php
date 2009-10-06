@@ -13,6 +13,7 @@ class DEC_Flickr_Photo
     public $description;
     public $flickrUser;
     public $url;
+    public $datePosted;
     public $tags       = array();
     public $sizes      = array();
 
@@ -30,6 +31,10 @@ class DEC_Flickr_Photo
         $this->description = (string)$info->photo->description;
         $this->url         = (string)$info->photo->urls->url;
         $this->tags        = (array)$info->photo->tags->tag;
+        
+        // unix timestamp.
+        $dates = $info->photo->dates->attributes();
+        $this->datePosted  = (string)$dates['posted'];
         
         $sizes = $flickr->photosGetSizes(array('photo_id' => $this->id));
         foreach ($sizes->size as $size):
