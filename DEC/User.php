@@ -33,6 +33,12 @@ class DEC_User
 
         $this->info     = new stdClass;
         if ($userId > 0)  {
+            // general user info
+            $where   = $this->_dbUsers->getAdapter()->quoteInto('id = ?', $userId);
+            $userRow = $this->_dbUsers->fetchRow($where);
+            $this->firstName = $userRow->firstname;
+            $this->lastName  = $userRow->lastname;
+            $this->email     = $userRow->email;
             // populate since we got a user
             $where  = $this->_dbUsersInfo->getAdapter()->quoteInto('users_id = ?', $userId);
             $infoRS = $this->_dbUsersInfo->fetchAll($where);
