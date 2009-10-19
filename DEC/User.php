@@ -39,6 +39,7 @@ class DEC_User
             $this->firstName = $userRow->firstname;
             $this->lastName  = $userRow->lastname;
             $this->email     = $userRow->email;
+            $this->username  = $userRow->username;
             // populate since we got a user
             $where  = $this->_dbUsersInfo->getAdapter()->quoteInto('users_id = ?', $userId);
             $infoRS = $this->_dbUsersInfo->fetchAll($where);
@@ -104,5 +105,10 @@ class DEC_User
     function getInfo()
     {
         return $this->info;
+    }
+    
+    function getInfoKeys()
+    {
+        return $this->infoKeys;
     }
 }
