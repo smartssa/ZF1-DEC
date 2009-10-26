@@ -36,16 +36,20 @@ class DEC_User
             // general user info
             $where   = $this->_dbUsers->getAdapter()->quoteInto('id = ?', $userId);
             $userRow = $this->_dbUsers->fetchRow($where);
-            $this->firstName = $userRow->firstname;
-            $this->lastName  = $userRow->lastname;
-            $this->email     = $userRow->email;
-            $this->username  = $userRow->username;
-            // populate since we got a user
-            $where  = $this->_dbUsersInfo->getAdapter()->quoteInto('users_id = ?', $userId);
-            $infoRS = $this->_dbUsersInfo->fetchAll($where);
-            foreach ($infoRS as $row) {
-                $key = $this->infoKeys[$row->info_keys_id];
-                $this->info->$key = $row->value;
+
+            if ($userRow->id > 0) {
+                $this->id        = $userRow->id;
+                $this->firstname = $userRow->firstname;
+                $this->lastname  = $userRow->lastname;
+                $this->email     = $userRow->email;
+                $this->username  = $userRow->username;
+                // populate since we got a user
+                $where  = $this->_dbUsersInfo->getAdapter()->quoteInto('users_id = ?', $userId);
+                $infoRS = $this->_dbUsersInfo->fetchAll($where);
+                foreach ($infoRS as $row) {
+                    $key = $this->infoKeys[$row->info_keys_id];
+                    $this->info->$key = $row->value;
+                }
             }
         }
     }
@@ -64,7 +68,7 @@ class DEC_User
             $insert = array();
             $where  = array();
             $data   = array();
-            
+
             // go for it
             if (! $this->infoIds[$key]) {
                 // this key doesn't exist
@@ -83,7 +87,7 @@ class DEC_User
                 try {
                     $this->_dbUsersInfo->update($data, $where);
                 } catch (Exception $e) {
-                    print_r($e->getMessage());
+                    //print_r($e->getMessage());
                 }
             } else {
                 // insert mode
@@ -95,7 +99,7 @@ class DEC_User
                 try {
                     $this->_dbUsersInfo->insert($data);
                 } catch (Exception $e) {
-                    print_r($e->getMessage());
+                    //print_r($e->getMessage());
                 }
             }
             $this->info->$key = $value;
@@ -106,7 +110,7 @@ class DEC_User
     {
         return $this->info;
     }
-    
+
     function getInfoKeys()
     {
         return $this->infoKeys;
