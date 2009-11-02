@@ -17,7 +17,10 @@ class DEC_Models_Users extends Zend_Db_Table
 
         $result = $this->getAdapter()->fetchAll($select);
 
-        sort($result);
+        foreach ($result as $row) {
+            $newResult[$row['key']] = $row['username'];
+        }
+        sort($newResult);
         return $result;
         
     }
