@@ -20,8 +20,8 @@ class DEC_Models_Users extends Zend_Db_Table
         foreach ($result as $row) {
             $newResult[$row['key']] = $row['value'];
         }
-        sort($newResult);
+
         return $newResult;
-        
+
     }
 }
