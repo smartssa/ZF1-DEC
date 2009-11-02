@@ -21,7 +21,7 @@ class DEC_Models_Users extends Zend_Db_Table
             $newResult[$row['key']] = $row['username'];
         }
         sort($newResult);
-        return $result;
+        return $newResult;
         
     }
 }
