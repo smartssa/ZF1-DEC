@@ -17,7 +17,7 @@ class DEC_Models_Groups extends Zend_Db_Table
         $result = $this->getAdapter()->fetchAll($select);
 
         $result['--'] = "";
-        sort($result);
+
         return $result;
     }
     
