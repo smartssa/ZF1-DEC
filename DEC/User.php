@@ -43,6 +43,7 @@ class DEC_User
                 $this->lastname  = $userRow->lastname;
                 $this->email     = $userRow->email;
                 $this->username  = $userRow->username;
+                $this->registerdate = $userRow->created;
                 // populate since we got a user
                 $where  = $this->_dbUsersInfo->getAdapter()->quoteInto('users_id = ?', $userId);
                 $infoRS = $this->_dbUsersInfo->fetchAll($where);
