@@ -62,11 +62,21 @@ class DEC_Email {
     function setVariable($name, $value)
     {
         if ($this->emailTemplate === null) {
-            throw new Exception('template not set');
+            throw new Exception('cannot set variables when template is not set');
         }
         $this->emailTemplate->$name = $value;
-
     }
+    
+    function setVariables($variables) 
+    {
+        // set a bunch of variables from array
+        if (is_array($variables)) {
+            foreach ($variables as $key => $value) {
+                $this->emailTemplate->$key = $value;
+            }
+        }
+    }
+    
     function addTo($email)
     {
         if (!is_array($email)) {
