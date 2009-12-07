@@ -7,6 +7,7 @@ require_once 'DEC/Acl/Resource.php';
 class DEC_Acl extends Zend_Acl {
 
     protected $user;
+    protected $userId;
     protected $roles;
     protected $dbRoles;
     protected $dbUserRoles;
@@ -26,9 +27,17 @@ class DEC_Acl extends Zend_Acl {
             $roles[$role->id] = $role->role;
         }
 
-        if ($user->id > 0) {
+        // compatability with different cased userIs
+        // FIXME: update this to make it more versatile.
+        if (isset($this->user->id)) {
+            $this->userId = $this->user->id;
+        } else {
+            $this->userId = $this->user->ID;
+        }
+
+        if ($this->userId > 0) {
             //
-            $where = $this->dbUserRoles->getAdapter()->quoteInto('users_id = ?', $this->user->id);
+            $where = $this->dbUserRoles->getAdapter()->quoteInto('users_id = ?', $this->userId);
             $userRoles = $this->dbUserRoles->fetchAll($where);
             $this->user->roles = array();
 
@@ -54,7 +63,7 @@ class DEC_Acl extends Zend_Acl {
     function checkPermission($resource, $action, $redirect = false)
     {
         // if we're not logged in redirect to the login page
-        if ($this->user->id == 0) {
+        if ($this->userId == 0) {
             // bugger off - login required
             if ($redirect) {
                 $this->_redirect($redirect);

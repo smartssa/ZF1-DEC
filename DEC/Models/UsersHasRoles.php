@@ -1,4 +1,4 @@
-<?
+<?php
 /*
  * @revision    $Id$
  * @author      Darryl Clarke
