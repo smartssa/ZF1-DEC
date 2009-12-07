@@ -24,15 +24,22 @@ class DEC_Acl extends Zend_Acl {
         $this->user = $user;
         foreach ($rolesRs as $role) {
             $this->addRole(new DEC_Acl_Role($role->role));
-            $roles[$role->id] = $role->role;
+            if (isset($role->id)) {
+                $roleId = $role->id;
+            } else {
+                $roleId = $role->ID;
+            }
+            $roles[$roleId] = $role->role;
         }
 
         // compatability with different cased userIs
         // FIXME: update this to make it more versatile.
         if (isset($this->user->id)) {
             $this->userId = $this->user->id;
-        } else {
+        } elseif (isset($this->user->ID)) {
             $this->userId = $this->user->ID;
+        } else {
+            $this->userId = 0;
         }
 
         if ($this->userId > 0) {
@@ -64,9 +71,10 @@ class DEC_Acl extends Zend_Acl {
     {
         // if we're not logged in redirect to the login page
         if ($this->userId == 0) {
-            // bugger off - login required
+            // FIXME: make this use Z_C_A's _redirect/
             if ($redirect) {
-                $this->_redirect($redirect);
+                header('Location: ' . $redirect);
+                exit();
             }
         } else {
             if ($this->isAllowed($this->user->username, $resource, $action)
@@ -76,7 +84,8 @@ class DEC_Acl extends Zend_Acl {
                 return true;
             } else {
                 if ($redirect) {
-                    echo 'no permissions';
+                    header('Location: ' . $redirect);
+                    exit();
                 } else {
                     return false;
                 }

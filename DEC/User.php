@@ -37,8 +37,10 @@ class DEC_User
             $where   = $this->_dbUsers->getAdapter()->quoteInto('id = ?', $userId);
             $userRow = $this->_dbUsers->fetchRow($where);
 
-            if ($userRow->id > 0) {
-                $this->id        = $userRow->id;
+            $pk = $this->_dbUsers->getPrimaryKey();
+
+            if (isset($userRow->$pk) && $userRow->$pk > 0) {
+                $this->$pk       = $userRow->$pk;
                 $this->firstname = $userRow->firstname;
                 $this->lastname  = $userRow->lastname;
                 $this->email     = $userRow->email;
