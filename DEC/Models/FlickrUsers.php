@@ -1,6 +1,6 @@
 <?php
 /**
- * @version     $Id: FacebookUsers.php 53 2009-09-19 22:08:27Z dclarke $
+ * @version     $Id$
  * @author      Darryl Clarke
  */
 

@@ -1,7 +1,7 @@
 <?php
 /*
  *
- * @version     $Id: FormatDate.php 1508 2008-10-20 21:19:47Z dclarke $
+ * @version     $Id$
  * @link
  * @since
  */
