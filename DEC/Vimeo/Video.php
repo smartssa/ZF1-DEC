@@ -59,8 +59,9 @@ class DEC_Vimeo_Video
 
         // owner attributes
         $ownerAttribs = $info->owner->attributes();
-        $this->vimeoUserId   = (string)$ownerAttribs['id'];
-        $this->vimeoUserName = (string)$ownerAttribs['display_name'];
+        $this->vimeoUserId      = (string)$ownerAttribs['id'];
+        $this->vimeoUserName    = (string)$ownerAttribs['username'];
+        $this->vimeoDisplayName = (string)$ownerAttribs['display_name'];
     }
     
     public function getId() {

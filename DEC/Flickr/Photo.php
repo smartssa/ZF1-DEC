@@ -21,7 +21,6 @@ class DEC_Flickr_Photo
     {
         $attributes       = $photo->attributes();
         $this->id         = (string)$attributes['id'];
-        $this->flickrUser = (string)$attributes['owner'];
         
         $flickr = $requestObject;
         $info = $flickr->photosGetInfo(array('photo_id' => $this->id));
@@ -32,6 +31,16 @@ class DEC_Flickr_Photo
         $this->url         = (string)$info->photo->urls->url;
         $this->tags        = (array)$info->photo->tags->tag;
         
+        // username and userid
+        if (! $info->owner) {
+            // no owner, no photo.
+            throw new Exception('Flickr_Photo failed to get info for ID ' . $this->id);
+        }
+        $ownerAttribs = $info->owner->attributes();
+        $this->flickrUserId      = (string)$ownerAttribs['nsid'];
+        $this->flickrDisplayName = (string)$ownerAttribs['realname'];
+        $this->flickrUserName    = (string)$ownerAttribs['username'];
+
         // unix timestamp.
         $dates = $info->photo->dates->attributes();
         $this->datePosted  = (string)$dates['posted'];

@@ -16,7 +16,12 @@ class DEC_Flickr_PhotoList extends DEC_List
         $this->list = &$this->photos;
 
         foreach ($photos->photo as $photo) {
-            $this->photos[] = new DEC_Flickr_Photo($photo, $requestObject);
+            try {
+                $photo = new DEC_Flickr_Photo($photo, $requestObject);
+                $this->photos[] = $photo;
+            } catch (Exception $e) {
+                // bogus photo, ignore it.
+            }
         }
     }
 
