@@ -27,7 +27,6 @@ class DEC_Vimeo_Video
         $attributes        = $video->attributes();
 
         $this->id          = (string)$attributes['id'];
-        $this->vimeoUserId = (string)$attributes['owner'];
 
         $vimeo = $requestObject;
         /*
@@ -50,10 +49,15 @@ class DEC_Vimeo_Video
         $this->thumbnails = (array)$info->thumbnails->thumbnail;
         $this->tags       = (array)$info->tags->tag;
         $this->duration   = (string)$info->duration;
-        
-        
+
         $this->dimensions['height'] = (string)$info->height;
         $this->dimensions['width']  = (string)$info->width; 
+
+        // owner attributes
+        $owner = $info->owner;
+        $ownerAttribs = $owner->attributes();
+        $this->vimeoUserId   = (string)$ownerAttribs['id'];
+        $this->vimeoUserName = (string)$ownerAttribs['display_name'];
     }
     
     public function getId() {
