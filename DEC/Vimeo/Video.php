@@ -39,7 +39,12 @@ class DEC_Vimeo_Video
             // title is not included in the short response.
             $info = $vimeo->videosGetInfo(array('video_id' => $this->id));
         }
-        
+
+        if (! $info->owner) {
+            // no owner? no video!
+            throw new Exception('Vimeo_Video failed to get info for ID ' . $this->id);
+        }
+
         // populate other data, eh?
         $this->title      = (string)$info->title;
         $this->caption    = (string)$info->caption;
