@@ -54,8 +54,7 @@ class DEC_Vimeo_Video
         $this->dimensions['width']  = (string)$info->width; 
 
         // owner attributes
-        $owner = $info->owner;
-        $ownerAttribs = $owner->attributes();
+        $ownerAttribs = $info->owner->attributes();
         $this->vimeoUserId   = (string)$ownerAttribs['id'];
         $this->vimeoUserName = (string)$ownerAttribs['display_name'];
     }
