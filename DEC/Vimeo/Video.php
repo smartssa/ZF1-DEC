@@ -25,7 +25,6 @@ class DEC_Vimeo_Video
         
         // TODO: verify video is actually a video element.
         $attributes        = $video->attributes();
-
         $this->id          = (string)$attributes['id'];
 
         $vimeo = $requestObject;
@@ -40,7 +39,12 @@ class DEC_Vimeo_Video
             // title is not included in the short response.
             $info = $vimeo->videosGetInfo(array('video_id' => $this->id));
         }
-
+        
+        $status = $video->rsp->attributes();
+        if ($status['stat'] == 'fail') {
+            throw new Exception('Vimeo Vidoe failed to get video info');
+        }
+        
         // populate other data, eh?
         $this->title      = (string)$info->title;
         $this->caption    = (string)$info->caption;

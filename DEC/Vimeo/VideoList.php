@@ -17,7 +17,12 @@ class DEC_Vimeo_VideoList extends DEC_List
         $this->list = &$this->videos;
 
         foreach ($videos->video as $video) {
-            $this->videos[] = new DEC_Vimeo_Video($video, $requestObject);
+            try {
+                $video = new DEC_Vimeo_Video($video, $requestObject);
+                $this->videos[] = $video;
+            } catch (Exception $e) {
+                // invalid video, throwing it away.
+            }
         }
     }
     
