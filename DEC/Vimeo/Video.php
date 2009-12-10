@@ -40,11 +40,6 @@ class DEC_Vimeo_Video
             $info = $vimeo->videosGetInfo(array('video_id' => $this->id));
         }
         
-        $status = $video->rsp->attributes();
-        if ($status['stat'] == 'fail') {
-            throw new Exception('Vimeo Vidoe failed to get video info');
-        }
-        
         // populate other data, eh?
         $this->title      = (string)$info->title;
         $this->caption    = (string)$info->caption;
