@@ -15,4 +15,11 @@ class DEC_Models_RssFeed extends Zend_Db_Table
         return $this->fetchRow($where);
 
     }
+    
+    public function getStaleFeeds()
+    {
+        // SELECT * FROM `rss_feed` WHERE timediff(now(), last_checked) > '01:00:00'
+        $where = $this->getAdapter()->quoteInto('TIMEDIFF(NOW(), last_checked) > ?', '01:00:00');
+        return $this->fetchAll($where);
+    }
 }
