@@ -64,7 +64,7 @@ class DEC_Acl extends Zend_Acl {
 
     function addResource($resource)
     {
-        $this->add(new DEC_Acl_Resource($resource));
+        parent::addResource(new DEC_Acl_Resource($resource));
     }
 
     function checkPermission($resource, $action, $redirect = false)
