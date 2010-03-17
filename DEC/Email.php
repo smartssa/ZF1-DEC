@@ -20,6 +20,7 @@ class DEC_Email {
         $smtp_settings = array('auth' => 'login',
                     'username' => $config->smtp_username,
                     'password' => $config->smtp_password,
+		    'ssl'  => 'tls',
                     'port' => $config->smtp_port);
 
         $this->transport = new Zend_Mail_Transport_Smtp($config->smtp_server, $smtp_settings);
