@@ -57,7 +57,7 @@ class DEC_Word
                         }
                     } catch (DEC_Word_Lookup_Exception $e) {
                         // caught a dec word exception
-                        echo $e->getMessage();
+                        // echo $e->getMessage();
                     }
                 }
             } else {
@@ -69,6 +69,10 @@ class DEC_Word
         } else {
             throw new DEC_Word_Exception('Word definition not found via any provider.');
         }
+    }
+
+    public function getWord() {
+        return $this->word;
     }
 
     public function setDefinition($definition) {
