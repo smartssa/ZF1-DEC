@@ -4,6 +4,8 @@ abstract class DEC_Word_Lookup_Adapter_Abstract
     protected $baseUri;
     protected $apiKey;
     protected $json = null;
+    protected $sourceName;
+    protected $sourceUrl;
 
     public function __construct($config) {
         // stuff goes here.
@@ -21,6 +23,7 @@ abstract class DEC_Word_Lookup_Adapter_Abstract
             $wordObj->setRelated($this->getRelated($word));
             $wordObj->setExample($this->getExample($word));
             $wordObj->setPhonetic($this->getPhonetic($word));
+            $wordObj->setSource($this->sourceName, $this->sourceUrl);
         } else {
             throw new DEC_Word_Lookup_Exception('$wordObj is not an instance of DEC_Word');
         }
@@ -37,6 +40,7 @@ abstract class DEC_Word_Lookup_Adapter_Abstract
         $this->checkErrors($this->json);
         return $this->json;
     }
+
 
     abstract function setupApi($config);
     abstract function getDefinition($word);

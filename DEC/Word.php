@@ -8,6 +8,8 @@ class DEC_Word
     protected $example     = array();
     protected $adapters    = array();
     protected $lookupState = false;
+    protected $sourceName  = '';
+    protected $sourceUrl   = '';
 
     public function __construct($word, $autoLookup = true, $adapters = null) {
         if (!is_string($word) || trim($word) == '') {
@@ -103,6 +105,16 @@ class DEC_Word
     public function getPhonetic() {
         // example usage.
         return $this->phonetic;
+    }
+    
+    public function setSource($name, $url) {
+        $this->sourceName = $name;
+        $this->sourceUrl  = $url;
+        return $this;
+    }
+    
+    public function getSource() {
+        return '<a href="' . $this->sourceUrl . '">' . $this->sourceName . '</a>';
     }
 
 }

@@ -6,6 +6,7 @@ class DEC_Word_Lookup_Adapter_Google extends DEC_Word_Lookup_Adapter_Abstract
     protected $definitions = array();
     protected $related     = array();
     protected $examples    = array();
+    protected $sourceName  = 'Google';
 
     function setupApi($config) {
         // nothing to do for google.
@@ -40,7 +41,8 @@ class DEC_Word_Lookup_Adapter_Google extends DEC_Word_Lookup_Adapter_Abstract
     }
 
     private function googleMagic($word) {
-        $this->baseUri = "http://www.google.com/dictionary/json?callback=unwrap&q=".$word."&sl=en&tl=en";
+        $this->baseUri   = "http://www.google.com/dictionary/json?callback=unwrap&q=".$word."&sl=en&tl=en";
+        $this->sourceUrl = 'http://www.google.com/custom?q='.$word.'&sa=Search&client=pub-5500510161812654&forid=1';
         $this->request($this->baseUri);
         // do all the processing here.
         if ($this->json->primaries > 0) {

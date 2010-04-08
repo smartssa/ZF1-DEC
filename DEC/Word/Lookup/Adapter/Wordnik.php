@@ -1,7 +1,7 @@
 <?php
 class DEC_Word_Lookup_Adapter_Wordnik extends DEC_Word_Lookup_Adapter_Abstract
 {
-    
+    protected $sourceName = 'Wordnik';
     
     function setupApi($config) {
         // wprdnik needs api key.
@@ -9,7 +9,8 @@ class DEC_Word_Lookup_Adapter_Wordnik extends DEC_Word_Lookup_Adapter_Abstract
     }
 
     function getDefinition($word) {
-        $this->baseUri = 'http://api.wordnik.com/api/word.json/' . $word . '/definitions';
+        $this->baseUri   = 'http://api.wordnik.com/api/word.json/' . $word . '/definitions';
+        $this->sourceUrl = 'http://www.wordnik.com/words/' . $word;
         $this->request($this->baseUri);
         $definitions = array();
         foreach ($this->json as $entry) {
@@ -22,7 +23,8 @@ class DEC_Word_Lookup_Adapter_Wordnik extends DEC_Word_Lookup_Adapter_Abstract
     }
 
     function getRelated($word) {
-        $this->baseUri = 'http://api.wordnik.com/api/word.json/' . $word . '/related';
+        $this->baseUri   = 'http://api.wordnik.com/api/word.json/' . $word . '/related';
+        $this->sourceUrl = 'http://www.wordnik.com/words/' . $word;
         $this->request($this->baseUri);
         $related = array();
         foreach ($this->json as $entry) {
@@ -32,7 +34,8 @@ class DEC_Word_Lookup_Adapter_Wordnik extends DEC_Word_Lookup_Adapter_Abstract
     }
 
     function getExample($word) {
-        $this->baseUri = 'http://api.wordnik.com/api/word.json/' . $word . '/examples';
+        $this->baseUri   = 'http://api.wordnik.com/api/word.json/' . $word . '/examples';
+        $this->sourceUrl = 'http://www.wordnik.com/words/' . $word;
         $this->request($this->baseUri);
         $examples = array();
         foreach ($this->json as $entry) {
