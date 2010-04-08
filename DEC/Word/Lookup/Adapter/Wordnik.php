@@ -13,7 +13,10 @@ class DEC_Word_Lookup_Adapter_Wordnik extends DEC_Word_Lookup_Adapter_Abstract
         $this->request($this->baseUri);
         $definitions = array();
         foreach ($this->json as $entry) {
-            $definitions[] = new DEC_Word_Definition($entry->text, $entry->partOfSpeech, null, null);
+            if (trim($entry->text) != '') {
+                // wordnik doesn't do related and examples per type.
+                $definitions[] = new DEC_Word_Definition($entry->text, $entry->partOfSpeech, null, null);
+            }
         }
         return $definitions;
     }

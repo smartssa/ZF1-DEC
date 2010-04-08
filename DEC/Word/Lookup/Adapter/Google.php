@@ -9,16 +9,6 @@ class DEC_Word_Lookup_Adapter_Google extends DEC_Word_Lookup_Adapter_Abstract
 
     function setupApi($config) {
         // nothing to do for google.
-        //        $client = new Zend_Http_Client($google);
-        //        $googleResponse = $client->request();
-        //        $body = $googleResponse->getBody();
-        //        $body = str_replace('unwrap(', '', $body);
-        //        $body = str_replace(',200,null)', '', $body);
-        //        $body = str_replace('\x', '%', $body);
-
-        //Zend_Json::$useBuiltinEncoderDecoder = true;
-        //        $x = Zend_Json::decode($body, Zend_Json::TYPE_OBJECT);
-
     }
 
     function getDefinition($word) {
@@ -54,7 +44,7 @@ class DEC_Word_Lookup_Adapter_Google extends DEC_Word_Lookup_Adapter_Abstract
         $this->request($this->baseUri);
         // do all the processing here.
         if ($this->json->primaries > 0) {
-            
+            $filter = new Zend_Filter_StripTags();
             $primary = $this->json->primaries[0];
             // primary contains type/terms/entries
             foreach ($primary->terms as $term) {
@@ -74,8 +64,21 @@ class DEC_Word_Lookup_Adapter_Google extends DEC_Word_Lookup_Adapter_Abstract
                             foreach ($entry->terms as $term) {
                                 switch ($term->type) {
                                     case "text":
-                                        $this->definitions[] = new DEC_Word_Definition($term->text, null, null, null);
+                                        $definition = $filter->filter(urldecode($term->text));
+                                        if ($term->labels) {
+                                            foreach ($term->labels as $label) {
+                                                switch ($label->title) {
+                                                    case 'Part-of-speech':
+                                                        $partofspeech = strtolower($label->text);
+                                                        continue;
+                                                        break;
+                                                }
+                                            }
+                                        }
                                         break;
+                                }
+                                if (trim($definition) != '') {
+                                    $this->definitions[] = new DEC_Word_Definition($definition, $partofspeech, $related, $example);
                                 }
                             }
                         }
@@ -84,10 +87,10 @@ class DEC_Word_Lookup_Adapter_Google extends DEC_Word_Lookup_Adapter_Abstract
                                 // extra entries
                                 switch ($subEntry->type) {
                                     case "example":
-                                        $this->examples[] = $subEntry->terms[0]->text;
+                                        $this->examples[] = $filter->filter(urldecode($subEntry->terms[0]->text));
                                         break;
                                     case "related":
-                                        $this->related[] = $subEntry->terms[0]->text;
+                                        $this->related[] = $filter->filter(urldecode($subEntry->terms[0]->text));
                                         break;
                                 }
                             }
