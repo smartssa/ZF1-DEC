@@ -29,4 +29,11 @@ class DEC_Models_Users extends Zend_Db_Table
         return $newResult;
 
     }
+    
+    function verifyToken($token) {
+        // check the token provided against a user record.
+        $where = $this->getAdapter()->quoteInto('authcode = ?', $token);
+        $row   = $this->fetchRow($where);
+        return $row;
+    }
 }
