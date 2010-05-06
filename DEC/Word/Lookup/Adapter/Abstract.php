@@ -31,7 +31,7 @@ abstract class DEC_Word_Lookup_Adapter_Abstract
     }
 
     public function request($url) {
-        $client = new Zend_Http_Client($url, array('strict' => false));
+        $client = new Zend_Http_Client($url, array('strict' => false, 'timeout' => '5'));
         if ($this->apiKey !== null) {
             $client->setHeaders('api_key', $this->apiKey);
         }
