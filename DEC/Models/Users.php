@@ -12,7 +12,7 @@ class DEC_Models_Users extends Zend_Db_Table
         // yeah, this table only has one
         return $this->_primary[1];
     }
-    
+
     function fetchUsernames()
     {
         // return an array(userid => username);
@@ -29,11 +29,28 @@ class DEC_Models_Users extends Zend_Db_Table
         return $newResult;
 
     }
-    
+
+    function updateToken($userId) {
+        // generate a new token
+        $token = md5(time() . 'pants' . microtime(true));
+        $where = $this->getAdapter()->quoteInto('id = ?', $userId);
+        $data  = array('authcode' => $token);
+        try {
+            $this->update($data, $where);
+            return $token;
+        } catch (Exception $e) {
+            //  failed to update token
+        }
+    }
+
     function verifyToken($token) {
         // check the token provided against a user record.
-        $where = $this->getAdapter()->quoteInto('authcode = ?', $token);
-        $row   = $this->fetchRow($where);
-        return $row;
+        if ($token != '') {
+            $where = $this->getAdapter()->quoteInto('authcode = ?', $token);
+            $row   = $this->fetchRow($where);
+            return $row;
+        } else {
+            return false;
+        }
     }
 }
