@@ -10,6 +10,11 @@ class DEC_View_Helper_Username extends DEC_View_Helper_Helper
         $db = new DEC_Models_Users();
         $usernames = $db->fetchFirstnames();
         // TODO: link if provided
-        return $usernames[$id];
+        if ($usernames[$id]) {
+            $return = $usernames[$id];
+        } else {
+            $return = "No longer registered";
+        }
+        return $return;
     }
 }
