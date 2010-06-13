@@ -16,16 +16,31 @@ class DEC_Models_Users extends Zend_Db_Table
     function fetchUsernames()
     {
         // return an array(userid => username);
-
         $select  = $this->_db->select()
-        ->from($this->_name, array('key' => $this->_primary, 'value' => 'username'));
-
+        ->from($this->_name, array('key' => 'id', 'value' => 'username'));
         $result = $this->getAdapter()->fetchAll($select);
-
         foreach ($result as $row) {
             $newResult[$row['key']] = $row['value'];
         }
 
+        return $newResult;
+
+    }
+
+    function fetchFirstnames()
+    {
+        // return an array(userid => username);
+        $select  = $this->_db->select()
+        ->from($this->_name, array('key' => 'id', 'value' => 'firstname'));
+        $result = $this->getAdapter()->fetchAll($select);
+        foreach ($result as $row) {
+            if ($row['value'] == '') {
+                $name = 'Anonymous';
+            } else {
+                $name = $row['value']; 
+            }
+            $newResult[$row['key']] = $name;
+        }
         return $newResult;
 
     }
