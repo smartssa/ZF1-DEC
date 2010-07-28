@@ -102,7 +102,11 @@ class DEC_Email {
 
     function sendEmail()
     {
-        $message = $this->emailTemplate->render();
+    	if ($this->emailTemplate) {
+        	$message = $this->emailTemplate->render();
+    	} else {
+    		$message = '';
+    	}
 
         $this->mail->setBodyText(strip_tags($message));
         $this->mail->setBodyHtml($message);
@@ -111,6 +115,6 @@ class DEC_Email {
         } catch (Exception $e) {
             throw new Exception($e->getMessage());
         }
-        // this wil throw an exception
+        // this will throw an exception
     }
 }
