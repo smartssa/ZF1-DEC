@@ -12,15 +12,11 @@ class DEC_Models_InfoKeys extends Zend_Db_Table
     function getKeys()
     {
         $newResult = array();
-        // return an arary for select lists
-        $select  = $this->_db->select()
-        ->from($this->_name, array('key' => $this->_primary, 'value' => 'name'));
-
-        $result = $this->_db->fetchAll($select);
+        $result = $this->fetchAll();
 
         foreach ($result as $row) {
-            $id = $row['key'];
-            $newResult[$id] = $row['value'];
+            $id = $row->id;
+            $newResult[$id] = $row->name;
         }
         return $newResult;
         

@@ -73,7 +73,7 @@ class DEC_User
             $data   = array();
 
             // go for it
-            if (! $this->infoIds[$key]) {
+            if (! isset($this->infoIds[$key])) {
                 // this key doesn't exist
                 $insert['name'] = $key;
                 $newId = $this->_dbInfoKeys->insert($insert);
@@ -81,7 +81,7 @@ class DEC_User
                 $this->infoKeys[$newId] = $key;
             }
 
-            if ($this->info->$key) {
+            if (isset($this->info->$key)) {
                 // update mode
                 $where[] = $this->_dbUsersInfo->getAdapter()->quoteInto('info_keys_id = ?', $this->infoIds[$key]);
                 $where[] = $this->_dbUsersInfo->getAdapter()->quoteInto('users_id = ?', $this->_userId);
