@@ -20,7 +20,7 @@ class DEC_Email {
         $smtp_settings = array('auth' => 'login',
                     'username' => $config->smtp_username,
                     'password' => $config->smtp_password,
-		    'ssl'  => 'tls',
+                    'ssl'  => 'tls',
                     'port' => $config->smtp_port);
 
         $this->transport = new Zend_Mail_Transport_Smtp($config->smtp_server, $smtp_settings);
@@ -67,8 +67,8 @@ class DEC_Email {
         }
         $this->emailTemplate->$name = $value;
     }
-    
-    function setVariables($variables) 
+
+    function setVariables($variables)
     {
         // set a bunch of variables from array
         if (is_array($variables)) {
@@ -77,7 +77,7 @@ class DEC_Email {
             }
         }
     }
-    
+
     function addTo($email)
     {
         if (!is_array($email)) {
@@ -102,11 +102,11 @@ class DEC_Email {
 
     function sendEmail()
     {
-    	if ($this->emailTemplate) {
-        	$message = $this->emailTemplate->render();
-    	} else {
-    		$message = '';
-    	}
+        if ($this->emailTemplate) {
+            $message = $this->emailTemplate->render();
+        } else {
+            $message = '';
+        }
 
         $this->mail->setBodyText(strip_tags($message));
         $this->mail->setBodyHtml($message);
