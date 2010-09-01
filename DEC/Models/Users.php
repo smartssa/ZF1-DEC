@@ -37,7 +37,7 @@ class DEC_Models_Users extends Zend_Db_Table
             if ($row['value'] == '') {
                 $name = 'Anonymous';
             } else {
-                $name = $row['value']; 
+                $name = $row['value'];
             }
             $newResult[$row['key']] = $name;
         }
@@ -67,5 +67,11 @@ class DEC_Models_Users extends Zend_Db_Table
         } else {
             return false;
         }
+    }
+
+    function getByName($username) {
+        $where = $this->getAdapter()->quoteInto('username = ?', $username);
+        $row   = $this->fetchRow($where);
+        return $row;
     }
 }

@@ -45,7 +45,9 @@ class DEC_User
                 $this->lastname  = $userRow->lastname;
                 $this->email     = $userRow->email;
                 $this->username  = $userRow->username;
-                $this->grav_url  = "http://www.gravatar.com/avatar/" . md5( strtolower( trim( $this->email ) ) ) . "?d=identicon&s=" . $size;
+                $this->grav_url['small'] = "http://www.gravatar.com/avatar/" . md5( strtolower( trim( $this->email ) ) ) . "?d=monsterid&s=64";
+                $this->grav_url['large'] = "http://www.gravatar.com/avatar/" . md5( strtolower( trim( $this->email ) ) ) . "?d=monsterid&s=120";
+
                 $this->registerdate = $userRow->created;
                 // populate since we got a user
                 $where  = $this->_dbUsersInfo->getAdapter()->quoteInto('users_id = ?', $userId);

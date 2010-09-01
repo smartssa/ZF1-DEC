@@ -8,6 +8,12 @@
 class DEC_Models_Groups extends Zend_Db_Table
 {
     protected $_name = 'groups';
+    
+    const STATUS_PUBLIC   = 1;
+    const STATUS_PRIVATE  = 2;
+    const STATUS_FACEBOOK = 4;
+    const STATUS_DISABLED = 8;
+    const STATUS_SYSTEM   = 64;
 
     function getGroupsList() {
         // return an arary for select lists
@@ -26,7 +32,7 @@ class DEC_Models_Groups extends Zend_Db_Table
         // return names and id's of groups the user is part of
     }
 
-    public function createGroup($userId, $groupName, $groupStatus, $linkOwner = true) {
+    public function createGroup($userId, $groupName, $groupStatus = self::STATUS_PUBLIC, $linkOwner = true) {
         // create a group, return the new Id.
         
         // link the owner?
