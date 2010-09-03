@@ -34,12 +34,20 @@ class DEC_Models_Groups extends Zend_Db_Table
 
     public function createGroup($userId, $groupName, $groupStatus = self::STATUS_PUBLIC, $linkOwner = true) {
         // create a group, return the new Id.
+        $data = array(
+        	'users_id' => $userId,
+            'name'     => $groupName,
+            'status'   => $groupStatus);
         
+        $newGroupId = $this->insert($data);
+
         // link the owner?
         if ($linkOwner && $newGroupId) {
             $UhG = new DEC_Models_UsersHasGroups();
             $UhG->linkUserGroup($userId, $newGroupId);
         }
+        
+        return $newGroupId;
     }
 
 }
