@@ -13,7 +13,9 @@ class DEC_Models_UsersHasGroups extends Zend_Db_Table
         // make sure group exists, then link 'em.
         $data = array(
             'users_id'  => $userId,
-            'groups_id' => $groupId );
+            'groups_id' => $groupId,
+            'created_when'  => new Zend_Db_Expr('NOW()'),
+            'modified_when' => new Zend_Db_Expr('NOW()'));
         
         $this->insert($data);
     }

@@ -12,7 +12,8 @@ class DEC_Models_Groups extends Zend_Db_Table
     const STATUS_PUBLIC   = 1;
     const STATUS_PRIVATE  = 2;
     const STATUS_FACEBOOK = 4;
-    const STATUS_DISABLED = 8;
+    const STATUS_TWITTER  = 8;
+    const STATUS_DISABLED = 16;
     const STATUS_SYSTEM   = 64;
 
     function getGroupsList() {
@@ -37,7 +38,9 @@ class DEC_Models_Groups extends Zend_Db_Table
         $data = array(
         	'users_id' => $userId,
             'name'     => $groupName,
-            'status'   => $groupStatus);
+            'status'   => $groupStatus,
+            'created_when'  => new Zend_Db_Expr('NOW()'),
+            'modified_when' => new Zend_Db_Expr('NOW()'));
         
         $newGroupId = $this->insert($data);
 
@@ -46,8 +49,11 @@ class DEC_Models_Groups extends Zend_Db_Table
             $UhG = new DEC_Models_UsersHasGroups();
             $UhG->linkUserGroup($userId, $newGroupId);
         }
-        
         return $newGroupId;
+    }
+    
+    public function updateStatus($groupId, $newStatus) {
+        // modify the records status
     }
 
 }
