@@ -9,11 +9,12 @@ class DEC_Models_Groups extends Zend_Db_Table
 {
     protected $_name = 'groups';
     
-    const STATUS_PUBLIC   = 1;
-    const STATUS_PRIVATE  = 2;
-    const STATUS_FACEBOOK = 4;
-    const STATUS_TWITTER  = 8;
-    const STATUS_DISABLED = 16;
+    const STATUS_PUBLIC   = 1;  // anybody can join, everybody can see.
+    const STATUS_PRIVATE  = 2;  // owner can add/remove, nobody else can see
+    const STATUS_FACEBOOK = 4;  // uh.. yeah.
+    const STATUS_TWITTER  = 8;  // twitter list
+    const STATUS_CLOSED   = 16; // only owner can add, but everybody sees.
+    const STATUS_DISABLED = 32;
     const STATUS_SYSTEM   = 64;
 
     function getGroupsList() {
