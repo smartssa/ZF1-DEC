@@ -10,17 +10,18 @@ class DEC_Models_Groups extends Zend_Db_Table
     protected $_name = 'groups';
     
     const STATUS_PUBLIC   = 1;  // anybody can join, everybody can see.
-    const STATUS_PRIVATE  = 2;  // owner can add/remove, nobody else can see
-    const STATUS_FACEBOOK = 4;  // uh.. yeah.
-    const STATUS_TWITTER  = 8;  // twitter list
-    const STATUS_CLOSED   = 16; // only owner can add, but everybody sees.
+    const STATUS_CLOSED   = 2;  // only owner can add, but everybody sees.
+    const STATUS_PRIVATE  = 4;  // owner can add/remove, nobody else can see
+    const STATUS_FACEBOOK = 8;  // uh.. yeah.
+    const STATUS_TWITTER  = 16; // twitter list
     const STATUS_DISABLED = 32;
     const STATUS_SYSTEM   = 64;
 
-    function getGroupsList() {
+    function getGroupsList($filter = self::STATUS_PUBLIC) {
         // return an arary for select lists
         $select  = $this->_db->select()
-        ->from($this->_name, array('key' => 'id', 'value' => 'name'));
+        ->from($this->_name, array('key' => 'id', 'value' => 'name'))
+        ->where('status & ?', $filter);
         $result = $this->getAdapter()->fetchAll($select);
         $result['--'] = "";
         return $result;
