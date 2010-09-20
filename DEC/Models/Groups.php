@@ -177,7 +177,7 @@ class DEC_Models_Groups extends Zend_Db_Table_Abstract
         if ($group->id > 0) {
             // we got one
             $groupId = $group->id;
-            $updateMembers = false;
+            $updateMembers = true;
         } else {
             $groupId = $this->createGroup($userId, 'Facebook Group', 
                 self::STATUS_FACEBOOK + self::STATUS_PRIVATE + self::STATUS_SYSTEM, true);
