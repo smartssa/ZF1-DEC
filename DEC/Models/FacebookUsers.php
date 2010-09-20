@@ -13,7 +13,7 @@ class DEC_Models_FacebookUsers extends Zend_Db_Table
         $ids = array();
         if (is_array($facebookUsers)) {
             $ids    = implode(',', $facebookUsers); 
-            $where  = $this->getAdapter()->quoteInto('facebook_id IN (?)', $ids);
+            $where  = new Zend_Db_Expr('facebook_id IN (' . $ids . ')');
             $rowset = $this->fetchAll($where);
             $ids    = array();
             foreach ($rowset as $row) {
