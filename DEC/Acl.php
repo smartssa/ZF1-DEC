@@ -20,7 +20,7 @@ class DEC_Acl extends Zend_Acl {
         $this->dbRoles     = new DEC_Models_Roles();
         $this->dbUserRoles = new DEC_Models_UsersHasRoles();
         // build the role list
-        $rolesRs = $this->dbRoles->fetchAll();
+        $rolesRs = $this->dbRoles->getRoles();
         $this->user = $user;
         foreach ($rolesRs as $role) {
             $this->addRole(new DEC_Acl_Role($role->role));
