@@ -11,7 +11,7 @@ class DEC_Models_FacebookUsers extends Zend_Db_Table
     public function getIdsByFB($facebookUsers) {
         // return a list of local user id's for all the facebook users presented.
         $ids = array();
-        if (is_array($facebookUsers)) {
+        if (is_array($facebookUsers) && count($facebookUsers) > 0) {
             $ids     = implode(',', $facebookUsers);
             $where   = array(); 
             $where[] = new Zend_Db_Expr('facebook_id IN (' . $ids . ')');
