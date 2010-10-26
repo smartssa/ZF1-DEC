@@ -13,7 +13,7 @@ class DEC_Models_InfoKeys extends DEC_Db_Table
     {
         $tag = 'info_keys_cache';
         if ($return = $this->_getCache($tag)) {
-            return $return;
+            // return $return;
         }
 
         $newResult = array();
