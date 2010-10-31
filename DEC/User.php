@@ -1,8 +1,12 @@
 <?php
-
+/**
+ * A fancy awesome singleton User Object
+ * @author  dclarke
+ * @version $Id:$
+ *
+ */
 class DEC_User
 {
-
     static $_instance = null;
 
     private $_dbUsers;
@@ -17,10 +21,6 @@ class DEC_User
 
     function __construct($userId = null, $cache = null)
     {
-        Zend_Loader::loadClass('DEC_Models_Users');
-        Zend_Loader::loadClass('DEC_Models_UsersInfo');
-        Zend_Loader::loadClass('DEC_Models_InfoKeys');
-
         $this->_userId      = $userId;
         $this->_dbUsers     = new DEC_Models_Users();
         $this->_dbUsersInfo = new DEC_Models_UsersInfo();
@@ -62,14 +62,24 @@ class DEC_User
 
     function getInstance($userId = null)
     {
+        $cache = Zend_Registry::get('cache');
+        $tag = 'user_instance_' . $userId . '_' . str_replace('.', '_', $_SERVER['HTTP_HOST']);
         if (self::$_instance === null) {
-            self::$_instance = new DEC_User($userId);
+            if (! self::$_instance = $cache->load($tag)) {
+                self::$_instance = new DEC_User($userId);
+                $cache->save(self::$_instance, $tag);
+            }
         }
         return self::$_instance;
     }
 
     function updateUserInfo($infoArray = array()) {
         //
+        // destroy parent cache
+        $cache = Zend_Registry::get('cache');
+        $tag = 'user_instance_' . $this->_userId . '_' . str_replace('.', '_', $_SERVER['HTTP_HOST']);
+        $cache->remove($tag);
+        
         foreach ($infoArray as $key => $value) {
             $insert = array();
             $where  = array();
