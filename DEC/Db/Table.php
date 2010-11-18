@@ -63,8 +63,8 @@ class DEC_Db_Table extends Zend_Db_Table_Abstract {
     protected function _getQueue()
     {
         $this->_queue = false;
-        $name = str_replace('.', '_', $_SERVER['HTTP_HOST']);
-        $options = array('name' => $name);
+	$config = Zend_Registry::get('config');
+        $options = array('name' => $config->queue->name);
         try {
             $adapter = new DEC_Queue_Adapter_Memcacheq($options);
             $this->_queue = new Zend_Queue($adapter, $options);
