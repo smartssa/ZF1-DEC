@@ -1,6 +1,6 @@
 <?php
 /**
- * Partial View Caching 
+ * Partial View Caching
  * @author  dclarke
  * @version $Id:$
  */
@@ -12,11 +12,15 @@ class DEC_View_Helper_Partial extends Zend_View_Helper_Partial
     protected $_cacheObj = null;
 
     function partial($name = null, $module = null, $model = null, $cache = true) {
-/*
-        if (($log = Zend_Registry::get('logger')) != true) {
-            $log = false;
+        if (0 == func_num_args()) {
+            return $this;
         }
-*/
+
+        /*
+         if (($log = Zend_Registry::get('logger')) != true) {
+         $log = false;
+         }
+         */
         if ($cache) {
             if (($this->_cacheObj = Zend_Registry::get('cache')) != true) {
                 $cache = false;
