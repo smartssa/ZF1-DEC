@@ -35,7 +35,7 @@ class DEC_View_Helper_Partial extends Zend_View_Helper_Partial
         $key = false;
         if (($model || $module) && $cache) {
             // generate cache key based on module and model?!
-            $key = str_replace('.', '_', $name).md5(serialize($module) . serialize($model));
+            $key = str_replace(array('.', '-', '/'), '_', $name).md5(serialize($module) . serialize($model));
             // look for cached copy
             if ($cache && ($partial = $this->_cacheObj->load($key)) == true) {
                 // log
