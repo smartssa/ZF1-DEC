@@ -22,9 +22,13 @@ class DEC_Models_UsersHasGroups extends Zend_Db_Table
                 'groups_id' => $groupId,
                 'created_when'  => new Zend_Db_Expr('NOW()'),
                 'modified_when' => new Zend_Db_Expr('NOW()'));
-
-            $this->insert($data);
+            try {
+                $return = $this->insert($data);
+            } catch (Zend_Db_Statement_Exception $e) {
+                $return = false;
+            }
         }
+        return $return;
     }
 
     public function unlinkUserGroup($userId, $groupId) {
