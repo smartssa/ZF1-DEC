@@ -7,7 +7,7 @@
 
 class DEC_View_Helper_CssMasher extends DEC_View_Helper_Helper
 {
-    public function cssMasher($startFile = '/css/base.css')
+    public function cssMasher($startFile = '')
     {
         $css  = '';
         $root = getCwd(); // should be documet_root
@@ -17,12 +17,16 @@ class DEC_View_Helper_CssMasher extends DEC_View_Helper_Helper
         //@import url("/css/grid.css");
         //@import url("/css/type.css");
         //@import url("/css/widgets.css");
-        $css .= file_get_contents($root . '/css/reset.css');
-        $css .= file_get_contents($root . '/css/grid.css');
-        $css .= file_get_contents($root . '/css/type.css');
-        $css .= file_get_contents($root . '/css/widgets.css');
+        if ($startFile) {
+            $css .= file_get_contents($root . $startFile);
+        } else {
+            $css .= file_get_contents($root . '/css/reset.css');
+            $css .= file_get_contents($root . '/css/grid.css');
+            $css .= file_get_contents($root . '/css/type.css');
+            $css .= file_get_contents($root . '/css/widgets.css');
+        }
         // hackish for now
-        
+
         // TODO: Cache this
         // compress it into a mess
         /* remove comments */
