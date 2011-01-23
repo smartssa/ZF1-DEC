@@ -4,7 +4,7 @@
  * @author      Darryl Clarke
  */
 
-class DEC_Models_Users extends Zend_Db_Table
+class DEC_Models_Users extends DEC_Db_Table
 {
     protected $_name = 'users';
 
