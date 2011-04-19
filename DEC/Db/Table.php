@@ -63,15 +63,19 @@ class DEC_Db_Table extends Zend_Db_Table_Abstract {
     protected function _getQueue()
     {
         $this->_queue = false;
-	$config = Zend_Registry::get('config');
-        $options = array('name' => $config->queue->name);
-        try {
-            $adapter = new DEC_Queue_Adapter_Memcacheq($options);
-            $this->_queue = new Zend_Queue($adapter, $options);
-            $this->_log->debug('Set Queue!');
-        } catch (Zend_Queue_Exception $e) {
-            // no queue
+        $config = Zend_Registry::get('config');
+        if ($config->queue->enabled) {
+
+            $options = array('name' => $config->queue->name);
+            try {
+                $adapter = new DEC_Queue_Adapter_Memcacheq($options);
+                $this->_queue = new Zend_Queue($adapter, $options);
+                $this->_log->debug('Set Queue!');
+            } catch (Zend_Queue_Exception $e) {
+                // no queue
+            }
         }
+
         return $this->_queue;
     }
 
