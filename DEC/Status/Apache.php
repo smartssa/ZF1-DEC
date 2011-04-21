@@ -123,6 +123,7 @@ class DEC_Status_Apache {
                 break;
             case "9":
             case "10":
+            default:
                 $this->_status = self::STATUS_CRIT + self::STATUS_ACTIVE;
                 break;
         }
