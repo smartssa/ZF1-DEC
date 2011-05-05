@@ -1,5 +1,9 @@
 <?php
 
+/**
+ * @author dclarke
+ *
+ */
 class DEC_Db_Table extends Zend_Db_Table_Abstract {
 
     /**
@@ -59,8 +63,15 @@ class DEC_Db_Table extends Zend_Db_Table_Abstract {
         }
         return false;
     }
+    
+    /**
+     * @deprecated use public getQueue();
+     */
+    protected function _getQueue() {
+        return $this->getQueue();
+    }
 
-    protected function _getQueue()
+    public function getQueue()
     {
         $this->_queue = false;
         $config = Zend_Registry::get('config');
@@ -82,7 +93,7 @@ class DEC_Db_Table extends Zend_Db_Table_Abstract {
     public function queueUpdate($data, $where)
     {
         // queue an update using Zend_Queue_MemcacheQ
-        $queue = $this->_getQueue();
+        $queue = $this->getQueue();
         if ($queue) {
             // build a nice array of shit to shove in it
 
@@ -93,7 +104,7 @@ class DEC_Db_Table extends Zend_Db_Table_Abstract {
 
     public function queueInsert($data, $class)
     {
-        $queue = $this->_getQueue();
+        $queue = $this->getQueue();
         if ($queue) {
             $queueMe = array('action' => 'insert',
                 'data' => $data,
