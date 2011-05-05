@@ -10,7 +10,16 @@ class DEC_Badges extends DEC_Db_Table implements Iterator, Countable
     private $_allBadges          = array();
     private $_userId             = null;
     private $_position           = 0;
+    /**
+     * Enter description here ...
+     * @var DEC_Badges_UsersHasBadges
+     */
     private $_dbUserHasBadges    = null;
+    /**
+     * Enter description here ...
+     * @var DEC_Badges_RulesTally
+     */
+    private $_dbRulesTally       = null;
 
     /**
      * Enter description here ...
@@ -24,6 +33,7 @@ class DEC_Badges extends DEC_Db_Table implements Iterator, Countable
         }
         $this->_userId = $userId;
         $this->_dbUserHasBadges = new DEC_Badges_UsersHasBadges();
+        $this->_dbRulesTally    = new DEC_Badges_RulesTally();
 
         $this->populateBadges();
     }
@@ -129,5 +139,9 @@ class DEC_Badges extends DEC_Db_Table implements Iterator, Countable
         /// *BLIP*
         $this->_dbUserHasBadges->linkBadge($userId, $badgesId);
         // add it to the badges object for fun.
+        // smoke the tallies for this cheevo
+        $this->_dbRulesTally->removeTalliesForUser($badgesId, $userId);
+        // reresh badges lists
+        $this->populateBadges();
     }
 }
