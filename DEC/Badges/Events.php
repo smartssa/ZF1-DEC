@@ -16,7 +16,7 @@ class DEC_Badges_Events extends DEC_Db_Table {
     // this is a mysql set
     const EVENT_CLICK  = 1;
 
-    // this is a mysql enum
+    // this is a mysql set, but it returns the string
     const RULE_COUNTER = 'COUNTER';
     const RULE_ONETIME = 'ONETIME';
     const RULE_HYBRID  = 'HYBRID';
@@ -109,9 +109,13 @@ class DEC_Badges_Events extends DEC_Db_Table {
     }
 
     public function getRulesForEventType($eventType, $userId) {
-        // get this users unlocked badges
-        $excludeIds = $this->_badges->getBadgeIds();
         // find only rules that the user has not unlocked
+        // get this users unlocked badges
+        $usersBadgeIds = $this->_badges->getBadgeIds();
+        // also exclude ones that are disabled
+        $disabledBadgeIds = $this->_badges->getDisabledIds();
+        $excludeIds = array_merge($usersBadgeIds, $disabledBadgeIds);
+
         $where = array();
         
         $where[] = $this->getAdapter()->quoteInto('event_flags = ?', $eventType);

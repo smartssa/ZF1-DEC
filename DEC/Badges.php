@@ -5,6 +5,8 @@
  */
 class DEC_Badges extends DEC_Db_Table implements Iterator, Countable
 {
+    protected $_name = 'badges';
+
     private $_recentlyUnlocked   = array();
     private $_previouslyUnlocked = array();
     private $_allBadges          = array();
@@ -36,6 +38,7 @@ class DEC_Badges extends DEC_Db_Table implements Iterator, Countable
         $this->_dbRulesTally    = new DEC_Badges_RulesTally();
 
         $this->populateBadges();
+        parent::__construct();
     }
 
     /**
@@ -147,6 +150,18 @@ class DEC_Badges extends DEC_Db_Table implements Iterator, Countable
         return array_keys($this->_allBadges);
     }
 
+    public function getDisabledIds() {
+        $select = $this->select();
+        $select->from($this->_name, 'id')->where('enabled = ?', 0);
+
+        $rowset = $this->fetchAll($select);
+        $ids = array();
+        foreach ($rowset as $row) {
+            $ids[] = $row->id;
+        }
+        return $ids;
+    }
+
     /**
      * Enter description here ...
      * @param unknown_type $badgesId
@@ -155,7 +170,6 @@ class DEC_Badges extends DEC_Db_Table implements Iterator, Countable
     public function unlock($badgesId, $userId) {
         /// *BLIP*
         $this->_dbUserHasBadges->linkBadge($userId, $badgesId);
-        // add it to the badges object for fun.
         // smoke the tallies for this cheevo
         $this->_dbRulesTally->removeTalliesForUser($badgesId, $userId);
         // reresh badges lists
