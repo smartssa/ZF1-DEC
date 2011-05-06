@@ -40,7 +40,6 @@ class DEC_Badges_Events extends DEC_Db_Table {
         $hybrid 	= array();
 
         foreach ($rules as $rule) {
-            echo $rule->id, "::", $rule->badges_id, "<br/>";
             // process z rules.
             switch ($rule->rule_type) {
                 case self::RULE_COUNTER:
