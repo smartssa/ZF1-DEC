@@ -33,4 +33,22 @@ class DEC_Badges_UsersHasBadges extends DEC_Db_Table
         $rowset = $this->fetchAll($where);
         return $rowset;
     }
+    
+    /**
+     * flag as seen
+     */
+    public function flagAsSeen($userId, $badgeId) {
+        //
+        $where = array();
+        $where[] = $this->getAdapter()->quoteInto('users_id = ?', $userId);
+        $where[] = $this->getAdapter()->quoteInto('badges_id = ?', $badgeId);
+        
+        $data = array('seen_by_user' => 1, 'date_seen' => new Zend_Db_Expr('NOW()'));
+        
+        try {
+            $this->update($data, $where);
+        } catch (Exception $e) {
+            // fail? why for ar thou fail?
+        }
+    }
 }

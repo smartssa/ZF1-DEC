@@ -44,13 +44,17 @@ class DEC_Badges extends DEC_Db_Table implements Iterator, Countable
     private function populateBadges() {
         // popluate the various arrays
         $allBadges = $this->_dbUserHasBadges->getBadges($this->_userId);
-        
+
         foreach ($allBadges as $badge) {
-            $this->_allBadges[$badge->badges_id] = $badge->date_unlocked;
+            $this->_allBadges[$badge->badges_id]['date'] = $badge->date_unlocked;
+            $this->_allBadges[$badge->badges_id]['data'] = DEC_Badges_Info::getInfo($badge->badges_id);
+
             if ($badge->seen_by_user == 0) {
-                $this->_recentlyUnlocked[$badge->badges_id] = $badge->date_unlocked;
+                $this->_recentlyUnlocked[$badge->badges_id]['date'] = $badge->date_unlocked;
+                $this->_recentlyUnlocked[$badge->badges_id]['data'] = DEC_Badges_Info::getInfo($badge->badges_id);
             } else {
-                $this->_previouslyUnlocked[$badge->badges_id] = $badge->date_unlocked;
+                $this->_previouslyUnlocked[$badge->badges_id]['date'] = $badge->date_unlocked;
+                $this->_previouslyUnlocked[$badge->badges_id]['data'] = DEC_Badges_Info::getInfo($badge->badges_id);
             }
         }
     }
@@ -68,7 +72,20 @@ class DEC_Badges extends DEC_Db_Table implements Iterator, Countable
      * @return multitype:
      */
     public function getRecentBadges() {
+        $this->flagAsSeen(array_keys($this->_recentlyUnlocked));
         return $this->_recentlyUnlocked;
+    }
+
+    /**
+     * @param badgeIds array
+     */
+    public function flagAsSeen($badgeIds) {
+        //
+        if (count($badgeIds) > 0) {
+            foreach ($badgeIds as $badgeId) {
+                $this->_dbUserHasBadges->flagAsSeen($this->_userId, $badgeId);
+            }
+        }
     }
 
     /**
