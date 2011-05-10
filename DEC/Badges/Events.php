@@ -13,9 +13,6 @@ class DEC_Badges_Events extends DEC_Db_Table {
     protected $_badges = null;
     protected $_instance = null;
 
-    // this is a mysql set
-    const EVENT_CLICK  = 1;
-
     // this is a mysql set, but it returns the string
     const RULE_COUNTER = 'COUNTER';
     const RULE_ONETIME = 'ONETIME';
