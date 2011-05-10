@@ -14,11 +14,16 @@ class DEC_Badges_UsersHasBadges extends DEC_Db_Table
      * @param unknown_type $userId
      * @param unknown_type $badgeId
      */
-    public function linkBadge($userId, $badgeId) {
+    public function linkBadge($userId, $badgeId, $retroDate = null) {
         // yeah, you got it. link it.
         $data = array('users_id' => $userId,
 			'badges_id' => $badgeId,
 			'date_unlocked' => new Zend_Db_Expr('NOW()'));
+        
+        if ($retroDate) {
+            $data['date_unlocked'] = $retroDate;
+        }
+
         try {
             return $this->insert($data);
         } catch (Exception $e) {

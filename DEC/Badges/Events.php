@@ -19,14 +19,14 @@ class DEC_Badges_Events extends DEC_Db_Table {
     const RULE_HYBRID  = 'HYBRID';
     const RULE_VALUE   = 'VALUE';
 
-    public function queueTriggerEvent($userId, $event, $returnBadges = false, $extra = null) {
+    public function queueTriggerEvent($userId, $event, $extra = null, $returnBadges = false, $retroDate = null) {
 
         // attempt to queue the event so the user doesn't get blocked
         // if queue fails, do it immediately
 
     }
 
-    public function triggerEvent($userId, $event, $returnBadges = false, $extra = null) {
+    public function triggerEvent($userId, $event, $extra = null, $returnBadges = false, $retroDate = null) {
         // create a badges item thingy ma jigger.
         $this->_badges = new DEC_Badges($userId);
         $dbTally = new DEC_Badges_RulesTally();
@@ -45,14 +45,14 @@ class DEC_Badges_Events extends DEC_Db_Table {
                     $d = $dbTally->incrementTally($userId, $rule->id);
                     $rulestring = sprintf($rule->rule_string, $d);
                     if (eval($rulestring)) {
-                        $this->_badges->unlock($rule->badges_id, $userId);
+                        $this->_badges->unlock($rule->badges_id, $userId, $retroDate);
                     }
                     break;
                 case self::RULE_ONETIME:
                     // blip! unlocked, if it hasn't been before.
                     $rulestring = sprintf($rule->rule_string, $extra);
                     if (eval($rulestring)) {
-                        $this->_badges->unlock($rule->badges_id, $userId);
+                        $this->_badges->unlock($rule->badges_id, $userId, $retroDate);
                     }
                     break;
                 case self::RULE_VALUE:
@@ -92,7 +92,7 @@ class DEC_Badges_Events extends DEC_Db_Table {
                     $success = $success && $rulePassedForHybrid;
                 }
                 if ($success) {
-                    $this->_badges->unlock($badgeId, $userId);
+                    $this->_badges->unlock($badgeId, $userId, $retroDate);
                 }
             }
         }

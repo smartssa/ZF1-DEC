@@ -167,9 +167,9 @@ class DEC_Badges extends DEC_Db_Table implements Iterator, Countable
      * @param unknown_type $badgesId
      * @param unknown_type $userId
      */
-    public function unlock($badgesId, $userId) {
+    public function unlock($badgesId, $userId, $retroDate = null) {
         /// *BLIP*
-        $this->_dbUserHasBadges->linkBadge($userId, $badgesId);
+        $this->_dbUserHasBadges->linkBadge($userId, $badgesId, $retroDate);
         // smoke the tallies for this cheevo
         $this->_dbRulesTally->removeTalliesForUser($badgesId, $userId);
         // reresh badges lists
