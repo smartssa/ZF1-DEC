@@ -14,10 +14,11 @@ class DEC_Badges_Events extends DEC_Db_Table {
     protected $_instance = null;
 
     // this is a mysql set, but it returns the string
-    const RULE_COUNTER = 'COUNTER';
-    const RULE_ONETIME = 'ONETIME';
-    const RULE_HYBRID  = 'HYBRID';
-    const RULE_VALUE   = 'VALUE';
+    const RULE_COUNTER     = 'COUNTER';
+    const RULE_ONETIME     = 'ONETIME';
+    const RULE_CONDITIONAL = 'CONDITIONAL';
+    const RULE_HYBRID      = 'HYBRID';
+    const RULE_VALUE       = 'VALUE';
 
     public function queueTriggerEvent($userId, $event, $extra = null, $returnBadges = false, $retroDate = null) {
 
