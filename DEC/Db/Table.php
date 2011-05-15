@@ -10,9 +10,10 @@ class DEC_Db_Table extends Zend_Db_Table_Abstract {
      * Enter description here ...
      * @var Zend_Cache_Core
      */
-    private $_cache = null;
-    private $_log   = null;
-
+    private $_cache   = null;
+    private $_log     = null;
+    private $_readDb  = null;
+    private $_writeDb = null;
 
     /**
      * Enter description here ...
@@ -31,6 +32,61 @@ class DEC_Db_Table extends Zend_Db_Table_Abstract {
             $this->_log  = Zend_Registry::get('logger');
             $this->_log->debug('database logger enabled for ' . $this->_name);
         }
+
+        // setup write/read params
+        if (Zend_Registry::isRegistered('config')) {
+            $config = Zend_Registry::get('config');
+            if (isset($config->resources->multidb)) {
+                $this->_readDb = Zend_Db::factory($config->resources->multidb->readonly->adapter,
+                $config->resources->multidb->readonly->toArray());
+                $this->_log->debug('Enabled read only adapter');
+                $this->_writeDb = Zend_Db::factory($config->resources->multidb->master->adapter,
+                $config->resources->multidb->master->toArray());
+                $this->_log->debug('Enabled master adapter');
+            } else {
+                $this->_readDb = Zend_Db::factory($config->db->adapter, $config->db->toArray());
+                $this->_writeDb = $this->_readDb;
+                $this->_log->debug('Enabled single adapter operations');
+            }
+        }
+
+    }
+
+    public function delete($where)
+    {
+        $this->_setAdapter($this->_writeDb);
+        return parent::delete($where);
+    }
+
+    public function update($data, $where = null)
+    {
+        $this->_setAdapter($this->_writeDb);
+        return parent::update($data, $where);
+    }
+
+    public function insert($data)
+    {
+        $this->_log->debug('Insert to master');
+        $this->_setAdapter($this->_writeDb);
+        return parent::insert($data);
+    }
+
+    public function fetchAll($where = null, $order = null, $count = null, $offset = null)
+    {
+        $this->_setAdapter($this->_readDb);
+        return parent::fetchAll($where, $order, $count, $offset);
+    }
+
+    public function fetchRow($where = null, $order = null)
+    {
+        $this->_setAdapter($this->_readDb);
+        return parent::fetchRow($where, $order);
+    }
+
+    public function find()
+    {
+        $this->_setAdapter($this->_readDb);
+        return parent::find();
     }
 
     protected function _getCache($tag) {
@@ -75,8 +131,7 @@ class DEC_Db_Table extends Zend_Db_Table_Abstract {
     {
         $this->_queue = false;
         $config = Zend_Registry::get('config');
-        if ($config->queue->enabled) {
-
+        if (isset($config->queue->enabled) && $config->queue->enabled) {
             $options = array('name' => $config->queue->name);
             try {
                 $adapter = new DEC_Queue_Adapter_Memcacheq($options);
@@ -86,7 +141,6 @@ class DEC_Db_Table extends Zend_Db_Table_Abstract {
                 // no queue
             }
         }
-
         return $this->_queue;
     }
 
