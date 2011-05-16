@@ -73,7 +73,7 @@ class DEC_Models_Groups extends DEC_Db_Table
         $rowset = $this->fetchAll($where);
         $this->_setCache($rowset, $tag);
         return $rowset;
-        
+
     }
 
     public function getPrivate($userId) {
@@ -89,20 +89,20 @@ class DEC_Models_Groups extends DEC_Db_Table
         $this->_setCache($rowset, $tag);
         return $rowset;
     }
-    
+
     public function getUserOwn($userId) {
         $tag = 'groups_own_userid_' . $userId;
         if ($rowset = $this->_getCache($tag)) {
             return $rowset;
         }
-        
+
         // get a list of the groups the user owns.
         $where  = $this->getAdapter()->quoteInto('users_id = ?', $userId);
         $rowset = $this->fetchAll($where);
         $this->_setCache($rowset, $tag);
         return $rowset;
     }
-    
+
     public function getUserIn($userId) {
         // get a list of groups the user is in, exclude non-owned private
         $select = $this->select();
@@ -127,25 +127,19 @@ class DEC_Models_Groups extends DEC_Db_Table
         $ids = array();
         foreach ($rowset as $row) {
             $ids[] = $row->id;
-        } 
+        }
         return $ids;
     }
-    
+
     public function getMembers($groupId, $userId) {
-
-        $matchedGroupId = $this->isAllowed($groupId, $userId, true);
-
-        if ($matchedGroupId > 0) {
-            $select = $this->select();
-            $select->setIntegrityCheck(false);
-            $select->from(array('g' => 'groups'));
-            $select->joinLeft(array('uhg' => 'users_has_groups'), 'g.id = uhg.groups_id', array('users_id'));
-            $select->joinLeft(array('u' => 'users'), 'uhg.users_id = u.id', array('firstname', 'lastname', 'username'));
-            $select->where($this->getAdapter()->quoteInto('g.id = ?', $matchedGroupId));
-            $rowset = $this->fetchAll($select);
-            return $rowset;
-        } 
-        return false;
+        $select = $this->select();
+        $select->setIntegrityCheck(false);
+        $select->from(array('g' => 'groups'));
+        $select->joinLeft(array('uhg' => 'users_has_groups'), 'g.id = uhg.groups_id', array('users_id'));
+        $select->joinLeft(array('u' => 'users'), 'uhg.users_id = u.id', array('firstname', 'lastname', 'username'));
+        $select->where($this->getAdapter()->quoteInto('g.id = ?', $groupId));
+        $rowset = $this->fetchAll($select);
+        return $rowset;
     }
 
     public function addUser($groupId, $addingUserId, $callingUserId = null) {
@@ -194,24 +188,24 @@ class DEC_Models_Groups extends DEC_Db_Table
         }
         return $newGroupId;
     }
-    
+
     public function checkFacebook($userId, $friendsList) {
         // update/create a facebook group for userid
         $where   = array();
         $where[] = $this->getAdapter()->quoteInto('users_id = ?', $userId);
-        $where[] = new Zend_Db_Expr('status & ' . self::STATUS_FACEBOOK); 
+        $where[] = new Zend_Db_Expr('status & ' . self::STATUS_FACEBOOK);
         $group   = $this->fetchRow($where);
-        
+
         if ($group->id > 0) {
             // we got one
             $groupId = $group->id;
             $updateMembers = true;
         } else {
-            $groupId = $this->createGroup($userId, 'Facebook Group', 
-                self::STATUS_FACEBOOK + self::STATUS_PRIVATE + self::STATUS_SYSTEM, true);
+            $groupId = $this->createGroup($userId, 'Facebook Group',
+            self::STATUS_FACEBOOK + self::STATUS_PRIVATE + self::STATUS_SYSTEM, true);
             $updateMembers = true;
         }
-        
+
         if ($groupId && $updateMembers) {
             // add anybody in friends list to it
             // or replace existing list with new list
@@ -242,7 +236,7 @@ class DEC_Models_Groups extends DEC_Db_Table
         $where[] = $this->getAdapter()->quoteInto('status & ?', self::STATUS_PUBLIC);
         $where[] = $this->getAdapter()->quoteInto('id = ?', $groupId);
         $group   = $this->fetchRow($where);
-        
+
         if (is_object($group) && $group->id > 0) {
             $matchedGroupId = $group->id;
         } else {
@@ -261,7 +255,7 @@ class DEC_Models_Groups extends DEC_Db_Table
                 $where[] = $this->getAdapter()->quoteInto('id = ?', $groupId);
                 $group   = $this->fetchRow($where);
                 if (is_object($group) && $group->id > 0 && $group->users_id == $userId) {
-                    // owner, good. 
+                    // owner, good.
                     $matchedGroupId = $group->id;
                 } else {
                     // check if user is a member
