@@ -15,8 +15,6 @@ class DEC_Acl extends Zend_Acl {
 
     function __construct($user = null)
     {
-        Zend_Loader::loadClass('DEC_Models_Roles');
-        Zend_Loader::loadClass('DEC_Models_UsersHasRoles');
         $this->dbRoles     = new DEC_Models_Roles();
         $this->dbUserRoles = new DEC_Models_UsersHasRoles();
         // build the role list
@@ -44,8 +42,7 @@ class DEC_Acl extends Zend_Acl {
 
         if ($this->userId > 0) {
             //
-            $where = $this->dbUserRoles->getAdapter()->quoteInto('users_id = ?', $this->userId);
-            $userRoles = $this->dbUserRoles->fetchAll($where);
+            $userRoles = $this->dbUserRoles->getUserRoles($this->userId);
             $this->user->roles = array();
 
             foreach ($userRoles as $userRole) {

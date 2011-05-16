@@ -5,7 +5,7 @@
  *
  */
 
-class DEC_Models_Groups extends Zend_Db_Table_Abstract
+class DEC_Models_Groups extends DEC_Db_Table
 {
     protected $_name = 'groups';
 
@@ -18,6 +18,10 @@ class DEC_Models_Groups extends Zend_Db_Table_Abstract
     const STATUS_SYSTEM   = 64;
 
     function getGroupsList($filter = self::STATUS_PUBLIC, $userId = null) {
+        $tag = 'groups_list_' . $filter . $userId;
+        if ($result = $this->_getCache($tag)) {
+            return $result;
+        }
         // return an arary for select lists
         $select  = $this->_db->select()
         ->from($this->_name, array('key' => 'id', 'value' => 'name'))
@@ -28,10 +32,15 @@ class DEC_Models_Groups extends Zend_Db_Table_Abstract
         }
         $result = $this->getAdapter()->fetchAll($select);
         $result['--'] = "";
+        $this->_setCache($result, $tag);
         return $result;
     }
 
     public function getPublic($userId = null) {
+        $tag = 'groups_public_userid_' . $userId;
+        if ($rowset = $this->_getCache($tag)) {
+            return $rowset;
+        }
         // if user id is provided, exclude groups they are members of
         $select = $this->select();
         $select->setIntegrityCheck(false);
@@ -49,29 +58,48 @@ class DEC_Models_Groups extends Zend_Db_Table_Abstract
         }
 
         $rowset = $this->fetchAll($select);
+        $this->_setCache($rowset, $tag);
         return $rowset;
 
     }
 
     public function getClosed($userId) {
+        $tag = 'groups_closed_userid_' . $userId;
+        if ($rowset = $this->_getCache($tag)) {
+            return $rowset;
+        }
+
         $where = $this->getAdapter()->quoteInto("status & ? ", self::STATUS_CLOSED);
         $rowset = $this->fetchAll($where);
+        $this->_setCache($rowset, $tag);
         return $rowset;
         
     }
 
     public function getPrivate($userId) {
+        $tag = 'groups_private_userid_' . $userId;
+        if ($rowset = $this->_getCache($tag)) {
+            return $rowset;
+        }
+
         $where = array();
         $where[] = $this->getAdapter()->quoteInto("status & ? ", self::STATUS_PRIVATE);
         $where[] = $this->getAdapter()->quoteInto('users_id = ?', $userId);
         $rowset = $this->fetchAll($where);
+        $this->_setCache($rowset, $tag);
         return $rowset;
     }
     
     public function getUserOwn($userId) {
+        $tag = 'groups_own_userid_' . $userId;
+        if ($rowset = $this->_getCache($tag)) {
+            return $rowset;
+        }
+        
         // get a list of the groups the user owns.
         $where  = $this->getAdapter()->quoteInto('users_id = ?', $userId);
         $rowset = $this->fetchAll($where);
+        $this->_setCache($rowset, $tag);
         return $rowset;
     }
     
@@ -206,7 +234,7 @@ class DEC_Models_Groups extends Zend_Db_Table_Abstract
         }
     }
 
-    private function isAllowed($groupId, $userId, $memberCheck = false) {
+    public function isAllowed($groupId, $userId, $memberCheck = false) {
         $matchedGroupId = 0;
         // you can only get members if:
         // public
