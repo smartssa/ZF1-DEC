@@ -39,14 +39,14 @@ class DEC_Db_Table extends Zend_Db_Table_Abstract {
             if (isset($config->resources->multidb)) {
                 $this->_readDb = Zend_Db::factory($config->resources->multidb->readonly->adapter,
                 $config->resources->multidb->readonly->toArray());
-                $this->_log->debug('Enabled read only adapter');
+                // $this->_log->debug('Enabled read only adapter');
                 $this->_writeDb = Zend_Db::factory($config->resources->multidb->master->adapter,
                 $config->resources->multidb->master->toArray());
-                $this->_log->debug('Enabled master adapter');
+                // $this->_log->debug('Enabled master adapter');
             } else {
                 $this->_readDb = Zend_Db::factory($config->db->adapter, $config->db->toArray());
                 $this->_writeDb = $this->_readDb;
-                $this->_log->debug('Enabled single adapter operations');
+                // $this->_log->debug('Enabled single adapter operations');
             }
         }
 
@@ -66,7 +66,7 @@ class DEC_Db_Table extends Zend_Db_Table_Abstract {
 
     public function insert($data)
     {
-        $this->_log->debug('Insert to master');
+        // $this->_log->debug('Insert to master');
         $this->_setAdapter($this->_writeDb);
         return parent::insert($data);
     }
@@ -92,29 +92,29 @@ class DEC_Db_Table extends Zend_Db_Table_Abstract {
     protected function _getCache($tag) {
         if ($this->_cache !== null) {
             if ($data = $this->_cache->load(md5($tag))) {
-                $this->_log->debug('CACHE: returned ' . $tag);
+                // $this->_log->debug('CACHE: returned ' . $tag);
                 return $data;
             }
         }
-        $this->_log->debug('CACHE: not found ' . $tag);
+        // $this->_log->debug('CACHE: not found ' . $tag);
         return false;
     }
 
     protected function _setCache($data, $tag) {
         if ($this->_cache !== null) {
             if ($this->_cache->save($data, md5($tag))) {
-                $this->_log->debug('CACHE: saved ' . $tag);
+                // $this->_log->debug('CACHE: saved ' . $tag);
                 return true;
             }
         }
-        $this->_log->debug('CACHE: save failed ' . $tag);
+        // $this->_log->debug('CACHE: save failed ' . $tag);
         return false;
     }
 
     protected function _removeCache($tag) {
         if ($this->_cache !== null) {
             $this->_cache->remove(md5($tag));
-            $this->_log->debug('CACHE: removed ' . $tag);
+            // $this->_log->debug('CACHE: removed ' . $tag);
             return true;
         }
         return false;
@@ -136,7 +136,7 @@ class DEC_Db_Table extends Zend_Db_Table_Abstract {
             try {
                 $adapter = new DEC_Queue_Adapter_Memcacheq($options);
                 $this->_queue = new Zend_Queue($adapter, $options);
-                $this->_log->debug('Set Queue!');
+                // $this->_log->debug('Set Queue!');
             } catch (Zend_Queue_Exception $e) {
                 // no queue
             }
@@ -165,7 +165,7 @@ class DEC_Db_Table extends Zend_Db_Table_Abstract {
                 'table' => $this->_name,
                 'class' => $class);
             if ($queue->send($queueMe) == true) {
-                $this->_log->debug('Sent Insert Request to Queue.');
+                // $this->_log->debug('Sent Insert Request to Queue.');
                 return true;
             }
         }
