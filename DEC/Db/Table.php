@@ -30,7 +30,7 @@ class DEC_Db_Table extends Zend_Db_Table_Abstract {
 
         if (Zend_Registry::isRegistered('logger') && Zend_Registry::get('logger') instanceof Zend_Log) {
             $this->_log  = Zend_Registry::get('logger');
-            $this->_log->debug('database logger enabled for ' . $this->_name);
+            // $this->_log->debug('database logger enabled for ' . $this->_name);
         }
 
         // setup write/read params
