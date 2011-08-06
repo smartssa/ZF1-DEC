@@ -6,7 +6,7 @@
 
 class DEC_Models_TwitterUsers extends Zend_Db_Table
 {
-    protected $_name = 'Twitter_users';
+    protected $_name = 'twitter_users';
     
     public function getIdsByTwitterIds($TwitterUsers) {
         // return a list of local user id's for all the Twitter users presented.
@@ -25,10 +25,10 @@ class DEC_Models_TwitterUsers extends Zend_Db_Table
     }
     
     public function getIdByTwitterId($TwitterId) {
-        $return = '';
+        $return = 0;
         $where  = $this->getAdapter()->quoteInto('twitter_id = ?', $TwitterId);
         $row    = $this->fetchRow($where);
-        if ($row->users_id > 0) {
+        if (is_object($row) && $row->users_id > 0) {
             $return = $row->users_id;
         }
         return $return;

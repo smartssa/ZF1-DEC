@@ -74,4 +74,11 @@ class DEC_Models_Users extends DEC_Db_Table
         $row   = $this->fetchRow($where);
         return $row;
     }
+
+    function getById($id) {
+        $where = $this->getAdapter()->quoteInto('id = ?', $id);
+        $row   = $this->fetchRow($where);
+        return $row;
+
+    }
 }
