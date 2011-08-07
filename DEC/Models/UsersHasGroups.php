@@ -11,6 +11,7 @@ class DEC_Models_UsersHasGroups extends Zend_Db_Table
 
     public function linkUserGroup($userId, $groupId) {
         // make sure group exists, then link 'em.
+        $return = true;
         if (is_array($userId)) {
             foreach ($userId as $id) {
                 $return = $return & $this->linkUserGroup($id, $groupId);
