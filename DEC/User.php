@@ -2,7 +2,7 @@
 /**
  * A fancy awesome singleton User Object
  * @author  dclarke
- * @version $Id:$
+ * @version $Id$
  *
  */
 class DEC_User
@@ -45,8 +45,8 @@ class DEC_User
                 $this->lastname  = $userRow->lastname;
                 $this->email     = $userRow->email;
                 $this->username  = $userRow->username;
-                $this->grav_url['small'] = "http://www.gravatar.com/avatar/" . md5( strtolower( trim( $this->email ) ) ) . "?d=monsterid&s=64";
-                $this->grav_url['large'] = "http://www.gravatar.com/avatar/" . md5( strtolower( trim( $this->email ) ) ) . "?d=monsterid&s=120";
+                $this->grav_url['small'] = "https://secure.gravatar.com/avatar/" . md5( strtolower( trim( $this->email ) ) ) . "?d=monsterid&s=64";
+                $this->grav_url['large'] = "https://secure.gravatar.com/avatar/" . md5( strtolower( trim( $this->email ) ) ) . "?d=monsterid&s=120";
 
                 $this->registerdate = $userRow->created;
                 // populate since we got a user
