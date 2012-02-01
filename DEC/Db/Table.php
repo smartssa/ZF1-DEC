@@ -43,10 +43,13 @@ class DEC_Db_Table extends Zend_Db_Table_Abstract {
                 $this->_writeDb = Zend_Db::factory($config->resources->multidb->master->adapter,
                 $config->resources->multidb->master->toArray());
                 // $this->_log->debug('Enabled master adapter');
-            } else {
+            } elseif (isset($config->db)) {
                 $this->_readDb = Zend_Db::factory($config->db->adapter, $config->db->toArray());
                 $this->_writeDb = $this->_readDb;
                 // $this->_log->debug('Enabled single adapter operations');
+            } else {
+            	$this->_readDb = Zend_Db_Table::getDefaultAdapter();
+            	$this->_writeDb = $this->_readDb;
             }
         }
 
