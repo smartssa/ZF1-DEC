@@ -94,10 +94,12 @@ class DEC_Db_Table extends Zend_Db_Table_Abstract {
 
     protected function _getCache($tag) {
         if ($this->_cache !== null) {
-            if ($data = $this->_cache->load(md5($tag))) {
-                // $this->_log->debug('CACHE: returned ' . $tag);
-                return $data;
-            }
+        	if ($this->_cache->test($tag)) {
+	            if ($data = $this->_cache->load(md5($tag))) {
+	                // $this->_log->debug('CACHE: returned ' . $tag);
+	                return $data;
+	            }
+        	}
         }
         // $this->_log->debug('CACHE: not found ' . $tag);
         return false;
