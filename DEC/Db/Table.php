@@ -105,9 +105,9 @@ class DEC_Db_Table extends Zend_Db_Table_Abstract {
         return false;
     }
 
-    protected function _setCache($data, $tag) {
+    protected function _setCache($data, $tag, $time = false) {
         if ($this->_cache !== null) {
-            if ($this->_cache->save($data, md5($tag))) {
+            if ($this->_cache->save($data, md5($tag), array(), $time)) {
                 $this->_log->debug('CACHE: saved ' . $tag);
                 return true;
             }
