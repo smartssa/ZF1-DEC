@@ -96,30 +96,30 @@ class DEC_Db_Table extends Zend_Db_Table_Abstract {
         if ($this->_cache !== null) {
         	if ($this->_cache->test(md5($tag))) {
 	            if ($data = $this->_cache->load(md5($tag))) {
-	                // $this->_log->debug('CACHE: returned ' . $tag);
+	                $this->_log->debug('CACHE: returned ' . $tag);
 	                return $data;
 	            }
         	}
         }
-        // $this->_log->debug('CACHE: not found ' . $tag);
+        $this->_log->debug('CACHE: not found ' . $tag);
         return false;
     }
 
     protected function _setCache($data, $tag) {
         if ($this->_cache !== null) {
             if ($this->_cache->save($data, md5($tag))) {
-                // $this->_log->debug('CACHE: saved ' . $tag);
+                $this->_log->debug('CACHE: saved ' . $tag);
                 return true;
             }
         }
-        // $this->_log->debug('CACHE: save failed ' . $tag);
+        $this->_log->debug('CACHE: save failed ' . $tag);
         return false;
     }
 
     protected function _removeCache($tag) {
         if ($this->_cache !== null) {
             $this->_cache->remove(md5($tag));
-            // $this->_log->debug('CACHE: removed ' . $tag);
+            $this->_log->debug('CACHE: removed ' . $tag);
             return true;
         }
         return false;
