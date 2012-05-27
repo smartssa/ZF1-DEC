@@ -51,7 +51,15 @@ class DEC_Db_Table extends Zend_Db_Table_Abstract {
             	$this->_readDb = Zend_Db_Table::getDefaultAdapter();
             	$this->_writeDb = $this->_readDb;
             }
+            
+            if ($config->debug == '1') {
+            	$profiler = new Zend_Db_Profiler_Firebug();
+				$profiler->setEnabled(true);
+    			$this->_readDb->setProfiler($profiler);
+    			$this->_writeDb->setProfiler($profiler);
+            }
         }
+        
 
     }
 
