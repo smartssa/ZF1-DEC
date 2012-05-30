@@ -88,9 +88,13 @@ class DEC_Db_Table extends Zend_Db_Table_Abstract {
         return parent::fetchAll($where, $order, $count, $offset);
     }
 
-    public function fetchRow($where = null, $order = null)
+    public function fetchRow($where = null, $order = null, $forceMaster = false)
     {
-        $this->_setAdapter($this->_readDb);
+        if ($forceMaster) {
+            $this->_setAdapter($this->_writeDb);
+        } else {
+            $this->_setAdapter($this->_readDb);
+        }
         return parent::fetchRow($where, $order);
     }
 
