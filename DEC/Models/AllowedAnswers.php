@@ -13,4 +13,12 @@ class DEC_Models_AllowedAnswers extends DEC_Db_Table
         // TODO: if empty, return empty array.
         return $rows;
     }
+    
+    public function addAnswers($questionId, $answer, $correct = 0, $enabled = 1) {
+        
+    }
+    
+    public function disableAnswer($answerId) {
+        
+    }
 }

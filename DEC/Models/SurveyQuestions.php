@@ -14,6 +14,17 @@ class DEC_Models_SurveyQuestions extends DEC_Db_Table
         
         // TODO: if empty, return empty array.
         return $rows;
-
+    }
+    
+    public function addQuestion($surveyId, $question, $type, $required = 0, $enabled = 0) {
+        
+    }
+    
+    public function enableQuestion($questionId) {
+        // enable a question, as long as it has at least one answer enabled.
+    }
+    
+    public function disableQuestion($questionId) {
+        
     }
 }
