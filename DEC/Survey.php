@@ -89,6 +89,8 @@ class DEC_Survey extends DEC_List {
         $el->setValue($surveyId);
         $form->addElement($el);
 
+        $ua = new DEC_Models_UsersAnswers();
+
         foreach ($survey as $question) {
             switch ($question['type']) {
                 case 'radio':
@@ -121,6 +123,13 @@ class DEC_Survey extends DEC_List {
             if ($question['required']) {
                 $el->setRequired(true);
             }
+            
+            // populate, if we can.
+            // fetch values for responseId and userId and questionId
+            $value = $ua->fetchByRUQ($responseId, $this->_userId, $question['q_id']);
+            if ($value !== null) {
+                $el->setValue($value);
+            }
             $form->addElement($el);
         }
 
@@ -129,8 +138,6 @@ class DEC_Survey extends DEC_List {
         $el = new Zend_Form_Element_Submit('submit');
         $el->setLabel('Save');
         $form->addElement($el);
-
-        // populate, if we can.
 
         return $form;
     }
