@@ -43,5 +43,36 @@ class DEC_Models_SurveyResponses extends DEC_Db_Table
             }
         }
     }
+    
+    public function getStats($surveyId) {
+        
+        $where = array();
+        $where[] = $this->getAdapter()->quoteInto('surveys_id = ?', $surveyId);
+        $rows = $this->fetchAll($where);
+        
+        $users_started   = array(); // to track uq users
+        $users_completed = array();
+        $starts    = 0;
+        $completes = 0;
+        
+        $stats = array();
+        foreach ($rows as $row) {
+            $users_started[$row->users_id] = true;
+            $starts++;
+            if ($row->complete) {
+                $users_completed[$row->users_id] = true;
+                $completes++;
+            }
+            
+        }
 
+        $stats['unique_started'] = count($users_started);
+        $stats['unique_completed'] = count($users_started);
+        $stats['total_started'] = $starts;
+        $stats['total_completed'] = $completes;
+        $stats['user_list'] = $users_started + $users_completed;
+        
+        return $stats;
+    }
+    
 }

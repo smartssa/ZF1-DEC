@@ -5,6 +5,32 @@ class DEC_Models_UsersAnswers extends DEC_Db_Table
 
     protected $_name = 'users_answers';
 
+    public function fetchAnswers($questionId, $userId = null) {
+        $where = array();
+        if ($userId !== null) {
+            $where[] = $this->getAdapter()->quoteInto('users_id = ?', $userId);
+        }
+        $where[] = $this->getAdapter()->quoteInto('survey_questions_id = ?', $questionId);
+        $rows = $this->fetchAll($where);
+        
+        $answers = array();
+        foreach ($rows as $answer) {
+            if (isset($answers[$answer->survey_questions_id])) {
+                $new = $answers[$answer->survey_questions_id];
+            } else {
+                $new = array();
+            }
+            if (isset($new[$answer->value])) {
+                $new[$answer->value]++;
+            } else {
+                $new[$answer->value] = 1;
+            }
+            $answers[$answer->survey_questions_id] = $new;
+        }
+        
+        return $answers;
+    }
+    
     public function fetchByRUQ($responseId, $userId, $questionId) {
         $where = array();
         $where[] = $this->getAdapter()->quoteInto('users_id = ?', $userId);

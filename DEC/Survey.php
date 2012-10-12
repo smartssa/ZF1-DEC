@@ -179,6 +179,28 @@ Zend_Debug::dump($result, 'complete?');
         return $sr->startSurvey($surveyId, $this->_userId);
     }
 
+    public function getStats($surveyId, $userId = null) {
+        // return some stats:
+        if ($this->_responsesModel === null) {
+            $this->_responsesModel = new DEC_Models_SurveyResponses();
+        }
+        if ($this->_questionsModel === null) {
+            $this->_questionsModel = new DEC_Models_SurveyQuestions();
+        }
+        // started, completed, unique starts, unique completes
+        // user list of all completed+started
+        $stats = $this->_responsesModel->getStats($surveyId);
+Zend_Debug::dump($stats);
+        // question + answers
+        $answers = $this->_questionsModel->getUserAnswers($surveyId, $userId);
+Zend_Debug::dump($answers);
+        // drill down all the way.
+    }
+    
+    public function getUserResponses($userId, $surveyId) {
+        
+    }
+
     private function saveSurvey($surveyId, $responseId, $values) {
         // save survey response values.
         $ua = new DEC_Models_UsersAnswers();
