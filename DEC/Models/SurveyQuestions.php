@@ -42,16 +42,20 @@ class DEC_Models_SurveyQuestions extends DEC_Db_Table
         $answers = array();
         
         $ua = new DEC_Models_UsersAnswers();
+        $aa = new DEC_Models_AllowedAnswers();
         
         foreach ($rows as $q) {
             $new = array();
             $new['question'] = $q->question;
             $new['q_id']     = $q->id;
-
+            $new['q_type']   = $q->type;
             // fetch from usersAnswers
             $a = $ua->fetchAnswers($q->id, $userId);
             //
             $new['answers'] = $a;
+            // get allowedAnswers for mapping
+            $ala = $aa->fetchByQuestionId($q->id);
+            $new['allowed_answers'] = $ala;
             $answers[] = $new;
         }
         

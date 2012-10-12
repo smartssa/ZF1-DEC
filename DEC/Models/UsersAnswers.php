@@ -6,13 +6,15 @@ class DEC_Models_UsersAnswers extends DEC_Db_Table
     protected $_name = 'users_answers';
 
     public function fetchAnswers($questionId, $userId = null) {
+        // TODO: include/exclude completed surveys.
         $where = array();
+
         if ($userId !== null) {
-            $where[] = $this->getAdapter()->quoteInto('users_id = ?', $userId);
+            $where[] = $this->getAdapter()->quoteInto('users_id = ?', (int)$userId);
         }
         $where[] = $this->getAdapter()->quoteInto('survey_questions_id = ?', $questionId);
         $rows = $this->fetchAll($where);
-        
+
         $answers = array();
         foreach ($rows as $answer) {
             if (isset($answers[$answer->survey_questions_id])) {

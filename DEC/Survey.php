@@ -52,11 +52,7 @@ class DEC_Survey extends DEC_List {
 
         $rows = array();
         foreach ($qrows as $q) {
-            $arows = $this->_answersModel->fetchByQuestionId($q->id);
-            $answers = array();
-            foreach ($arows as $a) {
-                $answers[$a->id] = $a->name;
-            }
+            $answers = $this->_answersModel->fetchByQuestionId($q->id);
             $awesome = array('q_id' => $q->id, 'question' => $q->question,
                     'required' => $q->required,
                     'type' => $q->type, 'answers' => $answers);
@@ -101,7 +97,7 @@ class DEC_Survey extends DEC_List {
                     break;
                 case 'select':
                     $el = new Zend_Form_Element_Select('question_' . $question['q_id']);
-                    $el->setMultiOptions(array_merge(array('' => '--'), $question['answers']));
+                    $el->setMultiOptions(array('' => '--') + $question['answers']);
                     break;
                 case 'checkbox':
                     $el = new Zend_Form_Element_MultiCheckbox('question_' . $question['q_id']);
@@ -157,13 +153,13 @@ class DEC_Survey extends DEC_List {
         }
 
         $responseId = $form->getValue('r_id');
-Zend_Debug::dump($valid, 'valid?');
+
         $result = $this->saveSurvey($surveyId, $responseId, $form->getValues()); // run all values through filters.
-Zend_Debug::dump($result, 'result?');
+
         // save partial answers to db, but don't flag as complete.
         if ($valid && $result) {
             $result = $this->completeSurvey($surveyId, $responseId);
-Zend_Debug::dump($result, 'complete?');
+
         }
         return $valid && $result; // magic!
     }
@@ -190,11 +186,13 @@ Zend_Debug::dump($result, 'complete?');
         // started, completed, unique starts, unique completes
         // user list of all completed+started
         $stats = $this->_responsesModel->getStats($surveyId);
-Zend_Debug::dump($stats);
+
         // question + answers
         $answers = $this->_questionsModel->getUserAnswers($surveyId, $userId);
-Zend_Debug::dump($answers);
+
         // drill down all the way.
+        
+        return array('stats' => $stats, 'dataset' => $answers);
     }
     
     public function getUserResponses($userId, $surveyId) {
