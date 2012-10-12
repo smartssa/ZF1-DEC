@@ -14,7 +14,7 @@ class DEC_Models_AllowedAnswers extends DEC_Db_Table
         $rows = $this->fetchAll($where);
         $answers = array();
         foreach ($rows as $a) {
-            $answers[$a->id] = $a->name;
+            $answers[$a->id] = array('value' => $a->name, 'correct' => $a->correct_answer);
         }
 
         return $answers;

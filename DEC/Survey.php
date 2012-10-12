@@ -14,6 +14,15 @@ class DEC_Survey extends DEC_List {
     protected $_responsesModel = null;
 
     protected $_action; // where to send the form to.
+    
+    protected $_status = 0;
+    
+    const STATUS_SUCCESS_DB   = 1;
+    const STATUS_SUCCESS_FORM = 2;
+    const STATUS_FAIL_FORM    = 4;
+    const STATUS_FAIL_ANSWER  = 8;
+    const STATUS_FAIL_DB      = 16;
+
     public function __construct($userId = null, $action = null) {
         // connect the DEC_List iterator to the survey list
         $this->list = & $this->_surveys;
@@ -88,20 +97,26 @@ class DEC_Survey extends DEC_List {
         $ua = new DEC_Models_UsersAnswers();
 
         foreach ($survey as $question) {
+            // re-align answers for form-friendly arrays.
+            $answers = array();
+            foreach ($question['answers'] as $k => $a) {
+                $answers[$k] = $a['value'];
+            }
+
             switch ($question['type']) {
                 case 'radio':
                     // TODO: alow override of the divider.
                     $el = new Zend_Form_Element_Radio('question_' . $question['q_id']);
-                    $el->setMultiOptions($question['answers']);
+                    $el->setMultiOptions($answers);
                     $el->setSeparator('');
                     break;
                 case 'select':
                     $el = new Zend_Form_Element_Select('question_' . $question['q_id']);
-                    $el->setMultiOptions(array('' => '--') + $question['answers']);
+                    $el->setMultiOptions(array('' => '--') + $answers);
                     break;
                 case 'checkbox':
                     $el = new Zend_Form_Element_MultiCheckbox('question_' . $question['q_id']);
-                    $el->setMultiOptions($question['answers']);
+                    $el->setMultiOptions($answers);
                     $el->setSeparator('');
                     break;
                 case 'text':
@@ -147,21 +162,69 @@ class DEC_Survey extends DEC_List {
         if ($form->isValid($values)) {
             // yay!
             $valid = true;
+            $this->_status = self::STATUS_SUCCESS_FORM;
         } else {
             // boo.
             $valid = false;
+            $this->_status = self::STATUS_FAIL_FORM;
         }
 
         $responseId = $form->getValue('r_id');
+        // TODO check answers, any wrong answers set STATUS_ANSWER_FAIL
+        $questions = $this->getSurvey($surveyId);
+        $answers   = $form->getValues();
+        // realign questions w/ correct answers.
+        $correct_answers = array();
+        foreach ($questions as $q) {
+            if($q['type'] == 'text' || $q['type'] == 'textarea') {
+                continue;
+            }
+            $x = array();
+            foreach ($q['answers'] as $k => $a) {
+                if ($a['correct']) {
+                    $x[] = $k;
+                }
+            }
+            if (count($x) > 0) { 
+                $correct_answers[$q['q_id']] = $x;
+            }
+        }
+        foreach ($answers as $k => $a) {
+            // extract question id from key            
+            preg_match('/question_([0-9]+)/i', $k, $matches);
+            if (count($matches) == 2) {
+                $id = $matches[1];
+                // lookup and see if the answer value is 'correct'
+                if (isset($correct_answers[$id])) {
+                    if (! in_array($a, $correct_answers[$id])) {
+                        // set status and break, no point in checking the rest.
+                        $this->_status += self::STATUS_FAIL_ANSWER;
+                        break;
+                    } else {
+                        //
+                    }
+                }
+            }
+        }
 
-        $result = $this->saveSurvey($surveyId, $responseId, $form->getValues()); // run all values through filters.
+        // carry on.
+        $result = $this->saveSurvey($surveyId, $responseId, $answers); // run all values through filters.
+        if ($result) {
+            $this->_status += self::STATUS_SUCCESS_DB;
+        } else {
+            $this->_status += self::STATUS_FAIL_DB;
+        }
 
         // save partial answers to db, but don't flag as complete.
         if ($valid && $result) {
             $result = $this->completeSurvey($surveyId, $responseId);
-
+            if ($result) {
+                $this->_status += self::STATUS_SUCCESS_DB;
+            } else {
+                $this->_status += self::STATUS_FAIL_DB;
+            }
         }
-        return $valid && $result; // magic!
+        return $this->_status; // magic!
     }
 
     public function completeSurvey($surveyId, $responseId) {
@@ -215,6 +278,11 @@ class DEC_Survey extends DEC_List {
 
     public function setUser($userId) {
         $this->_userId = $userId;
+    }
+    
+    public function getStatus()
+    {
+        return $this->_status;
     }
 
 }
