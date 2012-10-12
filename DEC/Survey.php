@@ -170,7 +170,7 @@ class DEC_Survey extends DEC_List {
         }
 
         $responseId = $form->getValue('r_id');
-        // TODO check answers, any wrong answers set STATUS_ANSWER_FAIL
+        // check answers, any wrong answers set STATUS_ANSWER_FAIL
         $questions = $this->getSurvey($surveyId);
         $answers   = $form->getValues();
         // realign questions w/ correct answers.
