@@ -189,6 +189,7 @@ class DEC_Survey extends DEC_List {
                 $correct_answers[$q['q_id']] = $x;
             }
         }
+        
         foreach ($answers as $k => $a) {
             // extract question id from key            
             preg_match('/question_([0-9]+)/i', $k, $matches);
@@ -214,15 +215,10 @@ class DEC_Survey extends DEC_List {
         } else {
             $this->_status += self::STATUS_FAIL_DB;
         }
-
+        
         // save partial answers to db, but don't flag as complete.
-        if ($valid && $result) {
+        if ($this->_status & self::STATUS_SUCCESS_FORM && $this->_status & self::STATUS_SUCCESS_DB) {
             $result = $this->completeSurvey($surveyId, $responseId);
-            if ($result) {
-                $this->_status += self::STATUS_SUCCESS_DB;
-            } else {
-                $this->_status += self::STATUS_FAIL_DB;
-            }
         }
         return $this->_status; // magic!
     }
