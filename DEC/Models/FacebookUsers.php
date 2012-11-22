@@ -36,7 +36,7 @@ class DEC_Models_FacebookUsers extends Zend_Db_Table
     
     public function getIdById($userId) {
         $return = '';
-        $where  = $this->getAdapter()->quoteInto('users_id = ?', $userID);
+        $where  = $this->getAdapter()->quoteInto('users_id = ?', $userId);
         $row    = $this->fetchRow($where);
         if ($row->users_id > 0) {
             $return = (string)$row->facebook_id;
