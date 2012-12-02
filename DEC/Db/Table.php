@@ -38,10 +38,10 @@ class DEC_Db_Table extends Zend_Db_Table_Abstract {
             $config = Zend_Registry::get('config');
             if (isset($config->resources->multidb)) {
                 $this->_readDb = Zend_Db::factory($config->resources->multidb->readonly->adapter,
-                        $config->resources->multidb->readonly->toArray());
+                $config->resources->multidb->readonly->toArray());
                 // $this->_log->debug('Enabled read only adapter');
                 $this->_writeDb = Zend_Db::factory($config->resources->multidb->master->adapter,
-                        $config->resources->multidb->master->toArray());
+                $config->resources->multidb->master->toArray());
                 // $this->_log->debug('Enabled master adapter');
             } elseif (isset($config->db)) {
                 $this->_readDb = Zend_Db::factory($config->db->adapter, $config->db->toArray());
@@ -55,8 +55,9 @@ class DEC_Db_Table extends Zend_Db_Table_Abstract {
             if ($config->debug == '1') {
                 $profiler = new Zend_Db_Profiler_Firebug();
                 $profiler->setEnabled(true);
-                $this->_readDb->setProfiler($profiler);
-                $this->_writeDb->setProfiler($profiler);
+                $this->getAdapter()->setProfiler($profiler);
+                //$this->_readDb->setProfiler($profiler);
+                //$this->_writeDb->setProfiler($profiler);
             }
         }
 
@@ -65,42 +66,42 @@ class DEC_Db_Table extends Zend_Db_Table_Abstract {
 
     public function delete($where)
     {
-        $this->_setAdapter($this->_writeDb);
+        // $this->_setAdapter($this->_writeDb);
         return parent::delete($where);
     }
 
     public function update($data, $where = null)
     {
-        $this->_setAdapter($this->_writeDb);
+        // $this->_setAdapter($this->_writeDb);
         return parent::update($data, $where);
     }
 
     public function insert($data)
     {
         // $this->_log->debug('Insert to master');
-        $this->_setAdapter($this->_writeDb);
+        // $this->_setAdapter($this->_writeDb);
         return parent::insert($data);
     }
 
     public function fetchAll($where = null, $order = null, $count = null, $offset = null)
     {
-        $this->_setAdapter($this->_readDb);
+        // $this->_setAdapter($this->_readDb);
         return parent::fetchAll($where, $order, $count, $offset);
     }
 
     public function fetchRow($where = null, $order = null, $forceMaster = false)
     {
         if ($forceMaster) {
-            $this->_setAdapter($this->_writeDb);
+            // $this->_setAdapter($this->_writeDb);
         } else {
-            $this->_setAdapter($this->_readDb);
+            // $this->_setAdapter($this->_readDb);
         }
         return parent::fetchRow($where, $order);
     }
 
     public function find()
     {
-        $this->_setAdapter($this->_readDb);
+        // $this->_setAdapter($this->_readDb);
         return parent::find();
     }
 
@@ -178,9 +179,9 @@ class DEC_Db_Table extends Zend_Db_Table_Abstract {
         $queue = $this->getQueue();
         if ($queue) {
             $queueMe = array('action' => 'insert',
-                    'data' => $data,
-                    'table' => $this->_name,
-                    'class' => $class);
+                'data' => $data,
+                'table' => $this->_name,
+                'class' => $class);
             if ($queue->send($queueMe) == true) {
                 // $this->_log->debug('Sent Insert Request to Queue.');
                 return true;
@@ -188,22 +189,4 @@ class DEC_Db_Table extends Zend_Db_Table_Abstract {
         }
         return false;
     }
-
-    protected function _cleanData($data) {
-        // throw away array elements taht don't exist in this table.
-        $fields = $this->info(Zend_Db_Table_Abstract::COLS);
-        foreach ($data as $key=>$value) {
-            if (! in_array($key, $fields)) {
-                unset($data[$key]);
-            }
-        }
-        if (in_array('created', $fields)) {
-            $data['created']  = new Zend_Db_Expr('NOW()');
-        }
-        if (in_array('modified', $fields)) {
-            $data['modified'] = new Zend_Db_Expr('NOW()');
-        }
-        return $data;
-    }
-
 }
