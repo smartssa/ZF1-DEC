@@ -26,6 +26,8 @@ class DEC_Db_Table extends Zend_Db_Table_Abstract {
 
         if (Zend_Registry::isRegistered('cache') && Zend_Registry::get('cache') instanceof Zend_Cache_Core) {
             $this->_cache = Zend_Registry::get('cache');
+        } elseif (Zend_Registry::isRegistered('Zend_Cache') && Zend_Registry::get('Zend_Cache') instanceof Zend_Cache_Core){
+            $this->_cache = Zend_Registry::get('Zend_Cache');
         }
 
         if (Zend_Registry::isRegistered('logger') && Zend_Registry::get('logger') instanceof Zend_Log) {
