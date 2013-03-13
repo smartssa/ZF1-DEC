@@ -75,9 +75,19 @@ class DEC_Models_Users extends DEC_Db_Table
         return $row;
     }
 
-    function getById($id) {
+    function getById($id, $cache = false) {
+        if ($cache) {
+            $tag = 'dec_user_by_id_' .$id;
+            if ($return = $this->_getCache($tag)) {
+                return $return;
+            }
+        }
         $where = $this->getAdapter()->quoteInto('id = ?', $id);
         $row   = $this->fetchRow($where);
+        
+        if ($cache) {
+            $this->_setCache($return, $tag, 14400);
+        }
         return $row;
 
     }
