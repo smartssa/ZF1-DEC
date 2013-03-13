@@ -4,7 +4,7 @@
  * @author      Darryl Clarke
  */
 
-class DEC_Models_FacebookUsers extends Zend_Db_Table
+class DEC_Models_FacebookUsers extends DEC_Db_Table
 {
     protected $_name = 'facebook_users';
     
@@ -25,21 +25,32 @@ class DEC_Models_FacebookUsers extends Zend_Db_Table
     }
     
     public function getIdByFB($facebookId) {
+        $tag = 'facebook_users_id_by_fb_' . $facebookId;
+        if ($return = $this->_getCache($tag)) {
+            return $return;
+        }
         $return = '';
         $where  = $this->getAdapter()->quoteInto('facebook_id = ?', $facebookId);
         $row    = $this->fetchRow($where);
         if ($row->users_id > 0) {
             $return = $row->users_id;
+            $this->_setCache($return, $tag, 14400);
         }
         return $return;
     }
     
     public function getIdById($userId) {
+        $tag = 'facebook_users_id_by_id_' . $userId;
+        if ($return = $this->_getCache($tag)) {
+            return $return;
+        }
+
         $return = '';
         $where  = $this->getAdapter()->quoteInto('users_id = ?', $userId);
         $row    = $this->fetchRow($where);
         if ($row->users_id > 0) {
-            $return = (string)$row->facebook_id;
+            $return = $row->facebook_id;
+            $this->_setCache($return, $tag, 14400);
         }
         return $return;
     }
