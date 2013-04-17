@@ -101,10 +101,10 @@ class DEC_Db_Table extends Zend_Db_Table_Abstract {
         return parent::fetchRow($where, $order);
     }
 
-    public function find()
+    public function find($vals)
     {
         // $this->_setAdapter($this->_readDb);
-        return parent::find();
+        return parent::find($vals);
     }
 
     protected function _getCache($tag) {
