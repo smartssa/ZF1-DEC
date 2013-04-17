@@ -78,6 +78,11 @@ class DEC_Db_Table extends Zend_Db_Table_Abstract {
         return parent::update($data, $where);
     }
 
+    public function insertClean($data) {
+        $data = $this->_cleanData($data);
+        return $this->insert($data);
+    }
+    
     public function insert($data)
     {
         // $this->_log->debug('Insert to master');
