@@ -60,7 +60,7 @@ class DEC_User
         }
     }
 
-    function getInstance($userId = null)
+    static function getInstance($userId = null)
     {
         $cache = Zend_Registry::get('cache');
         $tag = 'user_instance_' . $userId . '_' . str_replace('.', '_', $_SERVER['HTTP_HOST']);

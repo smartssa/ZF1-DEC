@@ -72,7 +72,7 @@ class DEC_Db_Table extends Zend_Db_Table_Abstract {
         return parent::delete($where);
     }
 
-    public function update($data, $where = null)
+    public function update(Array $data, $where = null)
     {
         // $this->_setAdapter($this->_writeDb);
         return parent::update($data, $where);
@@ -83,7 +83,7 @@ class DEC_Db_Table extends Zend_Db_Table_Abstract {
         return $this->insert($data);
     }
     
-    public function insert($data)
+    public function insert(Array $data)
     {
         // $this->_log->debug('Insert to master');
         // $this->_setAdapter($this->_writeDb);
@@ -106,11 +106,13 @@ class DEC_Db_Table extends Zend_Db_Table_Abstract {
         return parent::fetchRow($where, $order);
     }
 
-    public function find($vals)
-    {
-        // $this->_setAdapter($this->_readDb);
-        return parent::find($vals);
-    }
+    //** removed due to strange behaviour. will always read from last default adapter.
+//    public function find()
+//    {
+//        $args = func_get_args();
+//        // $this->_setAdapter($this->_readDb);
+//        return parent::find($args);
+//    }
 
     protected function _getCache($tag) {
         if ($this->_cache !== null) {
