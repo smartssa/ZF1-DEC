@@ -14,16 +14,12 @@ class DEC_Email {
     function __construct($template = null, $to = null, $from = null, $subject = null, $variables = array())
     {
         $config = Zend_Registry::get('config');
-
-        Zend_Loader::loadClass('Zend_Mail');
-        Zend_Loader::loadClass('Zend_Mail_Transport_Smtp');
         $smtp_settings = array('auth' => 'login',
-                    'username' => $config->smtp_username,
-                    'password' => $config->smtp_password,
-                    'ssl'  => 'tls',
-                    'port' => $config->smtp_port);
-
-        $this->transport = new Zend_Mail_Transport_Smtp($config->smtp_server, $smtp_settings);
+                    'username' => $config->smtp->username,
+                    'password' => $config->smtp->password,
+                    'ssl'  => $config->smtp->security,
+                    'port' => $config->smtp->port);
+        $this->transport = new Zend_Mail_Transport_Smtp($config->smtp->server, $smtp_settings);
         $this->mail = new Zend_Mail('utf-8');
 
         // a bunch of optional construct thangs.
@@ -110,10 +106,11 @@ class DEC_Email {
 
         $this->mail->setBodyText(strip_tags($message));
         $this->mail->setBodyHtml($message);
+
         try {
             $this->mail->send($this->transport);
         } catch (Exception $e) {
-            throw new Exception($e->getMessage());
+            error_log($e->getMessage());
         }
         // this will throw an exception
     }
