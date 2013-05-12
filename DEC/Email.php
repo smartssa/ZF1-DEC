@@ -114,4 +114,8 @@ class DEC_Email {
         }
         // this will throw an exception
     }
+    
+    public function setReplyTo($address, $name) {
+        $this->mail->setReplyTo($address, $name);
+    }
 }
